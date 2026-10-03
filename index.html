@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresnas Studio 2.0 — Центр поддержки</title>
+<style>
+:root {
+    --bg: #06060f; --bg-2: #0e0e1c; --bg-3: #16162a; --bg-4: #1f1f38;
+    --border: #23234a; --border-2: #35356a;
+    --text: #eef0ff; --text-2: #a8aad0; --text-3: #666a99;
+    --accent: #7c5cff; --accent-2: #a29bfe; --accent-3: #5b4bd1;
+    --accent-glow: rgba(124, 92, 255, 0.45);
+    --success: #00e6a8; --warning: #ffb020; --info: #3da5ff; --danger: #ff4757;
+    --pink: #ff6bcb; --cyan: #00d9ff; --gold: #ffd700;
+    --gradient: linear-gradient(135deg, #7c5cff, #5b4bd1 50%, #a29bfe);
+    --gradient-2: linear-gradient(135deg, #00e6a8, #00d9ff);
+    --header-bg: rgba(6, 6, 15, 0.85);
+    --shadow-color: rgba(0,0,0,0.4); --shadow-heavy: rgba(0,0,0,0.6);
+}
+body.light-theme {
+    --bg: #f4f5fb; --bg-2: #ffffff; --bg-3: #eef0f9; --bg-4: #e3e6f3;
+    --border: #dfe2ef; --border-2: #c8cee0;
+    --text: #1a1a2e; --text-2: #4a4a6a; --text-3: #8a8aa0;
+    --accent: #6c4bd1; --accent-2: #7c5cff; --accent-3: #5b4bd1;
+    --accent-glow: rgba(108, 75, 209, 0.35);
+    --success: #00a37a; --warning: #d98800; --info: #1d7dd6; --danger: #e0303f;
+    --pink: #d63ea5; --cyan: #0099cc; --gold: #b8860b;
+    --header-bg: rgba(255, 255, 255, 0.85);
+    --shadow-color: rgba(100, 100, 150, 0.15);
+    --shadow-heavy: rgba(100, 100, 150, 0.25);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; transition: background-color 0.4s ease, color 0.4s ease; }
+body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(circle at 15% 15%, var(--accent-glow), transparent 45%), radial-gradient(circle at 85% 75%, rgba(0, 217, 255, 0.08), transparent 45%); pointer-events: none; z-index: 0; opacity: 0.5; transition: opacity 0.4s ease; }
+body.light-theme::before { opacity: 0.25; }
+header { position: sticky; top: 0; z-index: 100; background: var(--header-bg); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border-bottom: 1px solid var(--border); padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; transition: background-color 0.4s ease, border-color 0.4s ease; }
+.logo { display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; transition: transform 0.25s; }
+.logo:hover { transform: scale(1.03); }
+.logo-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 22px; position: relative; box-shadow: 0 6px 24px var(--accent-glow); animation: logoPulse 3s ease-in-out infinite; }
+@keyframes logoPulse { 0%, 100% { box-shadow: 0 6px 24px var(--accent-glow); } 50% { box-shadow: 0 6px 40px var(--accent-glow), 0 0 20px rgba(0, 217, 255, 0.3); } }
+.logo-icon::before { content: ''; position: absolute; inset: -4px; border-radius: 16px; background: var(--gradient); opacity: 0.35; filter: blur(12px); z-index: -1; }
+.logo-text { font-size: 20px; font-weight: 800; background: linear-gradient(135deg, #fff, #a29bfe 60%, #00d9ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.3px; }
+body.light-theme .logo-text { background: linear-gradient(135deg, #1a1a2e, #7c5cff 60%, #0099cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.logo-sub { color: var(--text-3); font-size: 10px; font-weight: 500; -webkit-text-fill-color: var(--text-3); letter-spacing: 2.5px; text-transform: uppercase; }
+nav { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.nav-btn { padding: 9px 16px; border: none; background: transparent; color: var(--text-2); border-radius: 9px; cursor: pointer; font-size: 13.5px; font-weight: 500; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; gap: 6px; white-space: nowrap; position: relative; }
+.nav-btn:hover { background: var(--bg-3); color: var(--text); }
+.nav-btn.active { background: linear-gradient(135deg, rgba(124,92,255,0.25), rgba(0,217,255,0.15)); color: var(--accent-2); box-shadow: inset 0 0 0 1px var(--border-2); }
+.nav-badge { position: absolute; top: 2px; right: 4px; background: var(--danger); color: white; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 100px; min-width: 16px; text-align: center; display: none; }
+.nav-badge.show { display: block; animation: pulse 2s infinite; }
+.utility-controls { display: flex; align-items: center; gap: 8px; }
+.theme-toggle { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); cursor: pointer; font-size: 17px; display: flex; align-items: center; justify-content: center; transition: all 0.25s; font-family: inherit; }
+.theme-toggle:hover { background: var(--bg-4); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 20px var(--accent-glow); }
+.theme-toggle .icon { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); display: block; }
+.theme-toggle.rotating .icon { transform: rotate(360deg); }
+.lang-switcher { display: flex; gap: 2px; background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 10px; padding: 3px; }
+.lang-btn { padding: 6px 10px; border: none; background: transparent; color: var(--text-3); border-radius: 7px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 38px; }
+.lang-btn:hover { background: var(--bg-4); color: var(--text-2); }
+.lang-btn.active { background: var(--gradient); color: white; box-shadow: 0 4px 12px var(--accent-glow); }
+.lang-btn .code { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; display: none; }
+@media (min-width: 900px) { .lang-btn .code { display: inline; } }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 100px; background: rgba(0, 230, 168, 0.1); border: 1px solid rgba(0, 230, 168, 0.3); color: var(--success); font-size: 12px; font-weight: 600; }
+.status-pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.btn { padding: 11px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit; background: var(--gradient); color: white; display: inline-flex; align-items: center; gap: 8px; justify-content: center; white-space: nowrap; position: relative; overflow: hidden; }
+.btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: transform 0.6s; }
+.btn:hover::before { transform: translateX(100%); }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px var(--accent-glow); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-outline { background: transparent; border: 1px solid var(--border-2); color: var(--text-2); }
+.btn-outline:hover { background: var(--bg-3); color: var(--text); border-color: var(--accent); }
+.btn-outline::before { display: none; }
+.btn-success { background: var(--gradient-2); color: #052a20; }
+.btn-danger { background: linear-gradient(135deg, #ff4757, #c0392b); }
+.btn-warning { background: linear-gradient(135deg, #ffb020, #f39c12); color: #1a1a2e; }
+.btn-sm { padding: 7px 13px; font-size: 12.5px; border-radius: 8px; }
+.btn-lg { padding: 15px 30px; font-size: 15px; border-radius: 12px; }
+.btn-block { width: 100%; }
+.btn-icon { padding: 8px; min-width: 36px; }
+main { position: relative; z-index: 1; max-width: 1320px; margin: 0 auto; padding: 32px; min-height: calc(100vh - 160px); }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.hero { text-align: center; padding: 60px 20px 40px; position: relative; }
+.hero h1 { font-size: clamp(34px, 5.5vw, 62px); font-weight: 900; margin-bottom: 20px; background: linear-gradient(135deg, #fff 0%, #a29bfe 40%, #00d9ff 80%, #ff6bcb 100%); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; letter-spacing: -1.5px; animation: gradientMove 6s ease infinite; }
+body.light-theme .hero h1 { background: linear-gradient(135deg, #1a1a2e 0%, #7c5cff 40%, #0099cc 80%, #d63ea5 100%); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+@keyframes gradientMove { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.hero p { font-size: 17px; color: var(--text-2); max-width: 680px; margin: 0 auto 30px; line-height: 1.7; }
+.hero-badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+.badge { padding: 9px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text-2); display: inline-flex; align-items: center; gap: 7px; transition: all 0.2s; }
+.badge:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
+.badge.by-flag { background: linear-gradient(135deg, rgba(210,39,48,0.15), rgba(0,166,81,0.15)); border-color: rgba(210,39,48,0.4); color: var(--text); }
+.maintenance-banner { background: linear-gradient(135deg, rgba(255,176,32,0.15), rgba(255,107,203,0.1)); border: 1px solid rgba(255,176,32,0.4); border-radius: 16px; padding: 18px 22px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; animation: slideIn 0.4s; }
+.maintenance-banner .icon { font-size: 32px; }
+.maintenance-banner .content { flex: 1; min-width: 200px; }
+.maintenance-banner .title { font-weight: 800; font-size: 15px; color: var(--warning); margin-bottom: 4px; }
+.maintenance-banner .desc { font-size: 13px; color: var(--text-2); }
+.maintenance-banner .time { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: var(--accent-2); font-family: 'Courier New', monospace; }
+.support-panel { background: linear-gradient(160deg, var(--bg-2), var(--bg-3)); border: 1px solid var(--border); border-radius: 22px; padding: 32px; margin-bottom: 32px; position: relative; overflow: hidden; }
+.support-panel::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(0, 230, 168, 0.1), transparent 70%); pointer-events: none; }
+.support-header { display: flex; justify-content: space-between; align-items: start; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+.support-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.support-subtitle { color: var(--text-3); font-size: 13.5px; }
+.support-stats-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.support-stat-mini { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-2); }
+.support-stat-mini .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
+.wait-time-banner { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 22px 26px; display: flex; align-items: center; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; transition: all 0.3s; }
+.wait-time-banner.fast { border-color: rgba(0,230,168,0.4); background: linear-gradient(90deg, rgba(0,230,168,0.06), var(--bg)); }
+.wait-time-banner.medium { border-color: rgba(255,176,32,0.4); background: linear-gradient(90deg, rgba(255,176,32,0.06), var(--bg)); }
+.wait-time-banner.slow { border-color: rgba(255,71,87,0.4); background: linear-gradient(90deg, rgba(255,71,87,0.06), var(--bg)); }
+.wait-icon { font-size: 42px; line-height: 1; filter: drop-shadow(0 4px 12px rgba(0,230,168,0.3)); }
+.wait-content { flex: 1; min-width: 200px; }
+.wait-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; margin-bottom: 4px; }
+.wait-value { font-size: 26px; font-weight: 900; letter-spacing: -0.8px; line-height: 1.1; }
+.wait-time-banner.fast .wait-value { color: var(--success); }
+.wait-time-banner.medium .wait-value { color: var(--warning); }
+.wait-time-banner.slow .wait-value { color: var(--danger); }
+.wait-hint { color: var(--text-3); font-size: 12.5px; margin-top: 4px; }
+.operators-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.operator-card { background: var(--bg); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 14px; transition: all 0.25s; position: relative; overflow: hidden; }
+.operator-card:hover { border-color: var(--border-2); transform: translateY(-3px); box-shadow: 0 10px 30px var(--shadow-color); }
+.operator-card.offline { opacity: 0.55; }
+.operator-card.online { border-left: 3px solid var(--success); }
+.operator-card.break { border-left: 3px solid var(--warning); }
+.operator-card.busy { border-left: 3px solid var(--info); }
+.operator-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; color: white; position: relative; flex-shrink: 0; text-transform: uppercase; }
+.operator-avatar.owner { background: linear-gradient(135deg, #ffd700, #ff9f1c); color: #1a1a2e; }
+.operator-avatar.specialist { background: linear-gradient(135deg, #7c5cff, #00d9ff); }
+.operator-status-dot { position: absolute; bottom: -2px; right: -2px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--bg); box-shadow: 0 0 8px currentColor; }
+.operator-status-dot.online { background: var(--success); color: var(--success); }
+.operator-status-dot.break { background: var(--warning); color: var(--warning); }
+.operator-status-dot.busy { background: var(--info); color: var(--info); }
+.operator-status-dot.offline { background: var(--text-3); color: var(--text-3); box-shadow: none; }
+.operator-info { flex: 1; min-width: 0; }
+.operator-name { font-weight: 700; font-size: 14px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.operator-role { font-size: 10.5px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+.operator-role.owner { color: var(--gold); }
+.operator-status-text { font-size: 11.5px; margin-top: 4px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.operator-status-text.online { color: var(--success); }
+.operator-status-text.break { color: var(--warning); }
+.operator-status-text.busy { color: var(--info); }
+.operator-status-text.offline { color: var(--text-3); }
+.operator-schedule { font-size: 10.5px; color: var(--text-3); margin-top: 3px; }
+.operator-schedule.working { color: var(--success); font-weight: 700; }
+.operator-schedule.not-working { color: var(--danger); font-weight: 700; }
+.my-status-switcher { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 8px; }
+.my-status-switcher .label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; padding: 0 6px; }
+.my-status-btn { padding: 7px 12px; border: none; background: transparent; color: var(--text-3); border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; gap: 5px; }
+.my-status-btn:hover { background: var(--bg-3); color: var(--text-2); }
+.my-status-btn.active.online { background: rgba(0,230,168,0.15); color: var(--success); box-shadow: inset 0 0 0 1px rgba(0,230,168,0.4); }
+.my-status-btn.active.break { background: rgba(255,176,32,0.15); color: var(--warning); box-shadow: inset 0 0 0 1px rgba(255,176,32,0.4); }
+.my-status-btn.active.offline { background: rgba(102,106,153,0.15); color: var(--text-2); box-shadow: inset 0 0 0 1px rgba(102,106,153,0.4); }
+.form-container { background: var(--bg-2); border-radius: 20px; padding: 36px; border: 1px solid var(--border); max-width: 760px; margin: 0 auto; box-shadow: 0 25px 70px var(--shadow-color); position: relative; overflow: hidden; }
+.form-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient); }
+.form-container.wide { max-width: 100%; }
+.form-title { font-size: 25px; font-weight: 800; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px; }
+.form-subtitle { color: var(--text-3); font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; color: var(--text-2); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group label .req { color: var(--danger); }
+.form-control { width: 100%; padding: 13px 16px; background: var(--bg); border: 1px solid var(--border-2); border-radius: 10px; color: var(--text); font-size: 14.5px; transition: all 0.2s; font-family: inherit; }
+.form-control:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.15); background: var(--bg-2); }
+.form-control::placeholder { color: var(--text-3); }
+textarea.form-control { resize: vertical; min-height: 130px; line-height: 1.6; }
+select.form-control { cursor: pointer; }
+select.form-control option { background: var(--bg-2); color: var(--text); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.char-counter { font-size: 11px; color: var(--text-3); text-align: right; margin-top: 4px; }
+.draft-indicator { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--success); margin-left: 10px; opacity: 0; transition: opacity 0.3s; }
+.draft-indicator.show { opacity: 1; }
+.draft-indicator::before { content: '💾'; }
+.bot-container { background: var(--bg-2); border-radius: 20px; padding: 36px; border: 1px solid var(--border); max-width: 760px; margin: 0 auto 20px; box-shadow: 0 25px 70px var(--shadow-color); position: relative; overflow: hidden; }
+.bot-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--cyan), var(--accent), var(--pink)); }
+.bot-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.bot-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 24px; position: relative; box-shadow: 0 8px 24px rgba(0, 217, 255, 0.35); }
+.bot-avatar::after { content: ''; position: absolute; bottom: 0; right: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--success); border: 3px solid var(--bg-2); box-shadow: 0 0 8px var(--success); animation: pulse 2s infinite; }
+.bot-info h3 { font-size: 17px; font-weight: 800; margin-bottom: 3px; }
+.bot-info p { color: var(--text-3); font-size: 12.5px; }
+.bot-progress { display: flex; gap: 6px; margin-bottom: 24px; align-items: center; }
+.bot-progress-step { flex: 1; height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; position: relative; }
+.bot-progress-step.done { background: linear-gradient(90deg, var(--success), var(--cyan)); }
+.bot-progress-step.current { background: var(--accent); }
+.bot-progress-label { font-size: 11px; color: var(--text-3); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-left: 10px; }
+.bot-messages { margin-bottom: 24px; }
+.bot-message { background: var(--bg); border: 1px solid var(--border-2); border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; max-width: 85%; border-bottom-left-radius: 4px; animation: msgIn 0.35s; font-size: 14px; line-height: 1.6; }
+.bot-message.me { background: var(--gradient); color: white; margin-left: auto; border: none; border-bottom-left-radius: 16px; border-bottom-right-radius: 4px; box-shadow: 0 8px 20px rgba(124,92,255,0.3); }
+@keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.bot-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+.bot-option { background: var(--bg); border: 1px solid var(--border-2); border-radius: 12px; padding: 16px 20px; cursor: pointer; transition: all 0.22s; font-family: inherit; font-size: 14px; color: var(--text); text-align: left; display: flex; align-items: center; gap: 12px; font-weight: 500; }
+.bot-option:hover { border-color: var(--accent); background: var(--bg-3); transform: translateX(6px); box-shadow: 0 8px 20px var(--accent-glow); }
+.bot-option .emoji { font-size: 22px; line-height: 1; }
+.bot-solution { background: linear-gradient(135deg, rgba(0,230,168,0.12), rgba(0,217,255,0.08)); border: 1px solid rgba(0,230,168,0.4); border-radius: 16px; padding: 22px; margin-bottom: 16px; animation: slideIn 0.4s; }
+.bot-solution-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-weight: 800; font-size: 16px; color: var(--success); }
+.bot-solution-content { color: var(--text); font-size: 14px; line-height: 1.75; }
+.bot-solution-content strong { color: var(--accent-2); }
+.bot-solution-content ol { margin: 8px 0 8px 20px; }
+.bot-solution-content li { margin-bottom: 6px; }
+.bot-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.alert { padding: 14px 18px; border-radius: 11px; margin-bottom: 20px; font-size: 13.5px; display: none; align-items: center; gap: 10px; font-weight: 500; animation: slideIn 0.3s; }
+.alert.show { display: flex; }
+@keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.alert-success { background: rgba(0, 230, 168, 0.12); color: var(--success); border: 1px solid rgba(0, 230, 168, 0.3); }
+.alert-error { background: rgba(255, 71, 87, 0.12); color: var(--danger); border: 1px solid rgba(255, 71, 87, 0.3); }
+.alert-info { background: rgba(61, 165, 255, 0.12); color: var(--info); border: 1px solid rgba(61, 165, 255, 0.3); }
+.alert-warning { background: rgba(255, 176, 32, 0.12); color: var(--warning); border: 1px solid rgba(255, 176, 32, 0.3); }
+.ticket { background: var(--bg-2); border-radius: 16px; padding: 22px; margin-bottom: 14px; border: 1px solid var(--border); border-left: 4px solid var(--accent); transition: all 0.28s; position: relative; }
+.ticket:hover { background: var(--bg-3); border-color: var(--border-2); transform: translateX(4px); }
+.ticket.status-open { border-left-color: var(--warning); }
+.ticket.status-progress { border-left-color: var(--info); }
+.ticket.status-closed { border-left-color: var(--success); }
+.ticket.status-rejected { border-left-color: var(--danger); opacity: 0.75; }
+.ticket.status-urgent { border-left-color: var(--danger); box-shadow: 0 0 0 1px rgba(255, 71, 87, 0.25); }
+.ticket-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 12px; flex-wrap: wrap; }
+.ticket-subject { font-size: 16px; font-weight: 700; color: var(--text); flex: 1; min-width: 200px; }
+.ticket-meta { display: flex; gap: 14px; font-size: 12px; color: var(--text-3); margin-bottom: 12px; flex-wrap: wrap; }
+.ticket-meta span { display: inline-flex; align-items: center; gap: 4px; }
+.ticket-body { color: var(--text-2); font-size: 13.5px; line-height: 1.65; margin-bottom: 14px; white-space: pre-wrap; word-break: break-word; }
+.status-tag { padding: 4px 11px; border-radius: 100px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.status-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-tag.open { background: rgba(255, 176, 32, 0.15); color: var(--warning); }
+.status-tag.progress { background: rgba(61, 165, 255, 0.15); color: var(--info); }
+.status-tag.closed { background: rgba(0, 230, 168, 0.15); color: var(--success); }
+.status-tag.rejected { background: rgba(255, 71, 87, 0.15); color: var(--danger); }
+.ticket-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.ticket-attachments { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.ticket-attachment-thumb { width: 60px; height: 60px; border-radius: 8px; border: 1px solid var(--border-2); object-fit: cover; cursor: pointer; transition: all 0.2s; }
+.ticket-attachment-thumb:hover { border-color: var(--accent); transform: scale(1.08); box-shadow: 0 8px 20px var(--accent-glow); }
+.ticket-notes-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,176,32,0.15); color: var(--warning); border: 1px solid rgba(255,176,32,0.3); padding: 3px 9px; border-radius: 100px; font-size: 10.5px; font-weight: 700; }
+.ticket-rating-badge { display: inline-flex; align-items: center; gap: 3px; background: rgba(255,215,0,0.15); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.file-upload-area { border: 2px dashed var(--border-2); border-radius: 12px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.25s; background: var(--bg); }
+.file-upload-area:hover, .file-upload-area.dragging { border-color: var(--accent); background: var(--bg-3); }
+.file-upload-area .icon { font-size: 32px; margin-bottom: 8px; opacity: 0.7; }
+.file-upload-area .text { font-size: 13.5px; color: var(--text-2); font-weight: 500; }
+.file-upload-area .hint { font-size: 11.5px; color: var(--text-3); margin-top: 4px; }
+.file-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 12px; }
+.file-preview-item { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-2); }
+.file-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.file-preview-item .remove { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: rgba(255, 71, 87, 0.9); color: white; border: none; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-family: inherit; font-weight: 800; }
+.file-preview-item .remove:hover { background: var(--danger); transform: scale(1.15); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.stat-card { background: var(--bg-2); border-radius: 15px; padding: 22px; border: 1px solid var(--border); text-align: center; transition: all 0.25s; cursor: pointer; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gradient); transform: scaleX(0); transition: transform 0.3s; }
+.stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.stat-card:hover::before { transform: scaleX(1); }
+.stat-card.active { border-color: var(--accent); background: var(--bg-3); box-shadow: 0 0 0 2px var(--accent-glow); }
+.stat-num { font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 6px; letter-spacing: -1.5px; }
+.stat-num.total { color: var(--accent-2); }
+.stat-num.open { color: var(--warning); }
+.stat-num.progress { color: var(--info); }
+.stat-num.closed { color: var(--success); }
+.stat-num.urgent { color: var(--danger); }
+.stat-num.rating { color: var(--gold); }
+.stat-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; }
+.filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.filter-bar .form-control { flex: 1; min-width: 220px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; backdrop-filter: blur(10px); animation: fadeIn 0.2s; }
+body.light-theme .modal-overlay { background: rgba(30, 30, 60, 0.4); }
+.modal { background: var(--bg-2); border-radius: 20px; padding: 30px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-2); box-shadow: 0 40px 100px var(--shadow-heavy); animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; }
+@keyframes modalIn { from { transform: scale(0.9) translateY(30px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.modal h3 { color: var(--text); margin-bottom: 6px; font-size: 20px; font-weight: 800; }
+.modal-sub { color: var(--text-3); font-size: 13px; margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; flex-wrap: wrap; }
+.image-viewer { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center; z-index: 3000; padding: 30px; cursor: zoom-out; }
+.image-viewer img { max-width: 100%; max-height: 100%; border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,0.8); animation: modalIn 0.3s; }
+.chat-box { background: var(--bg); border-radius: 14px; padding: 18px; max-height: 400px; overflow-y: auto; margin-bottom: 16px; border: 1px solid var(--border); scroll-behavior: smooth; position: relative; }
+.chat-box::-webkit-scrollbar { width: 6px; }
+.chat-box::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+.typing-indicator { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--accent-2); font-style: italic; padding: 6px 14px; background: var(--bg-3); border-radius: 12px; margin-bottom: 10px; width: fit-content; animation: msgIn 0.3s; }
+.typing-dots { display: inline-flex; gap: 3px; }
+.typing-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-2); animation: typingBounce 1.4s infinite; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+.message { margin-bottom: 14px; padding: 12px 16px; border-radius: 14px; max-width: 82%; font-size: 13.5px; line-height: 1.55; word-break: break-word; animation: msgIn 0.3s; }
+.message.user { background: var(--gradient); color: white; margin-left: auto; border-bottom-right-radius: 4px; box-shadow: 0 8px 20px rgba(124,92,255,0.3); }
+.message.support { background: var(--bg-3); border: 1px solid var(--border-2); border-bottom-left-radius: 4px; }
+.message-sender { font-weight: 700; font-size: 12px; margin-bottom: 5px; opacity: 0.9; }
+.message-time { font-size: 10.5px; opacity: 0.65; margin-top: 6px; }
+.reply-toolbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+.reply-toolbar button { padding: 6px 12px; border: 1px solid var(--border-2); background: var(--bg); color: var(--text-2); border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.2s; font-family: inherit; }
+.reply-toolbar button:hover { background: var(--bg-3); color: var(--text); border-color: var(--accent); }
+.emoji-picker { display: none; grid-template-columns: repeat(10, 1fr); gap: 4px; padding: 12px; background: var(--bg); border: 1px solid var(--border-2); border-radius: 12px; margin-bottom: 12px; max-height: 200px; overflow-y: auto; }
+.emoji-picker.show { display: grid; }
+.emoji-picker button { padding: 6px; border: none; background: transparent; cursor: pointer; font-size: 20px; border-radius: 6px; transition: all 0.15s; }
+.emoji-picker button:hover { background: var(--bg-3); transform: scale(1.2); }
+.quick-phrases { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.quick-phrase { padding: 6px 12px; background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 100px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--text-2); }
+.quick-phrase:hover { background: var(--bg-4); color: var(--text); border-color: var(--accent); }
+.notes-panel { background: rgba(255,176,32,0.06); border: 1px solid rgba(255,176,32,0.3); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+.notes-panel h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--warning); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.note-item { background: var(--bg); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; border-left: 3px solid var(--warning); }
+.note-item.important { border-left-color: var(--danger); }
+.note-item.escalation { border-left-color: var(--pink); background: rgba(255,107,203,0.06); }
+.note-meta { font-size: 10.5px; color: var(--text-3); margin-top: 4px; display: flex; gap: 8px; }
+.note-text { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+.note-form { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.note-form input { flex: 1; min-width: 200px; padding: 8px 12px; background: var(--bg); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 13px; }
+.note-form select { padding: 8px 12px; background: var(--bg); border: 1px solid var(--border-2); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 13px; }
+.csat-modal .stars { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+.csat-modal .star { font-size: 42px; cursor: pointer; transition: all 0.2s; filter: grayscale(1); opacity: 0.4; }
+.csat-modal .star:hover, .csat-modal .star.active { filter: grayscale(0); opacity: 1; transform: scale(1.15); }
+.csat-stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.csat-stat-row:last-child { border-bottom: none; }
+.schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 12px; }
+.schedule-day { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.schedule-day-label { font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.schedule-day-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); margin-bottom: 6px; }
+.schedule-day input[type="time"] { flex: 1; padding: 6px 8px; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 6px; color: var(--text); font-family: inherit; font-size: 11.5px; }
+.schedule-day input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+.auth-container { max-width: 430px; margin: 40px auto; background: var(--bg-2); border-radius: 20px; padding: 42px; border: 1px solid var(--border); box-shadow: 0 40px 100px var(--shadow-heavy); position: relative; overflow: hidden; }
+.auth-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient); }
+.auth-icon { width: 68px; height: 68px; border-radius: 18px; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 22px; box-shadow: 0 15px 40px var(--accent-glow); }
+.auth-container h2 { text-align: center; color: var(--text); margin-bottom: 6px; font-size: 22px; font-weight: 800; }
+.auth-sub { text-align: center; color: var(--text-3); font-size: 13px; margin-bottom: 26px; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-3); }
+.empty-state .icon { font-size: 68px; margin-bottom: 16px; opacity: 0.4; }
+.empty-state h4 { color: var(--text-2); margin-bottom: 8px; font-size: 16px; }
+.toast-container { position: fixed; top: 90px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 14px; padding: 14px 18px; min-width: 280px; max-width: 400px; box-shadow: 0 20px 50px var(--shadow-heavy); animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: center; gap: 12px; pointer-events: auto; border-left: 4px solid var(--accent); backdrop-filter: blur(20px); }
+.toast.success { border-left-color: var(--success); }
+.toast.error { border-left-color: var(--danger); }
+.toast.warning { border-left-color: var(--warning); }
+.toast.info { border-left-color: var(--info); }
+.toast-icon { font-size: 20px; }
+.toast-msg { font-size: 13.5px; color: var(--text); font-weight: 500; }
+@keyframes toastIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.toast.out { animation: toastOut 0.3s forwards; }
+@keyframes toastOut { to { transform: translateX(120%); opacity: 0; } }
+.faq-item { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: all 0.25s; }
+.faq-item.open { border-color: var(--accent); box-shadow: 0 8px 30px var(--accent-glow); }
+.faq-q { padding: 18px 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-weight: 600; color: var(--text); user-select: none; transition: background 0.2s; }
+.faq-q:hover { background: var(--bg-3); }
+.faq-q .arrow { transition: transform 0.35s; color: var(--accent-2); font-size: 16px; }
+.faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; padding: 0 22px; color: var(--text-2); font-size: 14px; line-height: 1.75; }
+.faq-item.open .faq-a { max-height: 500px; padding: 0 22px 22px; }
+footer { position: relative; z-index: 1; text-align: center; padding: 32px 20px; color: var(--text-3); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; }
+footer a { color: var(--accent-2); text-decoration: none; }
+.admin-tabs { display: flex; gap: 6px; margin-bottom: 24px; background: var(--bg-2); padding: 6px; border-radius: 14px; border: 1px solid var(--border); overflow-x: auto; }
+.admin-tab { padding: 10px 20px; border: none; background: transparent; color: var(--text-2); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13.5px; transition: all 0.2s; font-family: inherit; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.admin-tab:hover { background: var(--bg-3); color: var(--text); }
+.admin-tab.active { background: var(--gradient); color: white; box-shadow: 0 8px 20px var(--accent-glow); }
+.spec-card { background: var(--bg-2); border-radius: 16px; padding: 22px; margin-bottom: 14px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; transition: all 0.25s; border-left: 4px solid var(--success); }
+.spec-card:hover { border-color: var(--border-2); transform: translateX(4px); }
+.spec-card.blocked { border-left-color: var(--danger); opacity: 0.7; }
+.spec-info { flex: 1; min-width: 240px; }
+.spec-name { font-size: 16px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.spec-login { color: var(--text-3); font-size: 13px; font-family: 'Courier New', monospace; }
+.spec-meta { color: var(--text-3); font-size: 11.5px; margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
+.spec-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.spec-badge { padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.spec-badge.active { background: rgba(0,230,168,0.15); color: var(--success); border: 1px solid rgba(0,230,168,0.3); }
+.spec-badge.blocked { background: rgba(255,71,87,0.15); color: var(--danger); border: 1px solid rgba(255,71,87,0.3); }
+.server-hero { background: linear-gradient(135deg, rgba(210,39,48,0.12), rgba(0,166,81,0.12)); border: 1px solid rgba(210,39,48,0.3); border-radius: 20px; padding: 32px; margin-bottom: 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; position: relative; overflow: hidden; }
+body.light-theme .server-hero { background: linear-gradient(135deg, rgba(210,39,48,0.08), rgba(0,166,81,0.08)); }
+.server-hero-flag { font-size: 72px; line-height: 1; filter: drop-shadow(0 8px 20px rgba(210,39,48,0.4)); }
+.server-hero-info { flex: 1; min-width: 240px; }
+.server-hero-title { font-size: 26px; font-weight: 900; margin-bottom: 6px; background: linear-gradient(135deg, #fff, #ff8c92, #92e6b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+body.light-theme .server-hero-title { background: linear-gradient(135deg, #1a1a2e, #d22730, #00a651); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.server-hero-sub { color: var(--text-2); font-size: 14px; margin-bottom: 14px; }
+.server-hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.server-hero-stat { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; min-width: 110px; }
+.server-hero-stat .v { font-size: 20px; font-weight: 800; color: var(--accent-2); }
+.server-hero-stat .l { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+.referral-card { background: linear-gradient(160deg, var(--bg-2), var(--bg-3)); border: 1px solid var(--border); border-radius: 22px; padding: 32px; margin-bottom: 32px; position: relative; overflow: hidden; }
+.referral-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,107,203,0.12), transparent 70%); pointer-events: none; }
+.referral-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.referral-desc { color: var(--text-2); font-size: 14px; margin-bottom: 22px; line-height: 1.7; }
+.referral-form { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.referral-form .form-control { flex: 1; min-width: 220px; }
+.promo-box { background: var(--bg); border: 2px dashed var(--accent); border-radius: 14px; padding: 22px; text-align: center; margin-top: 16px; animation: slideIn 0.4s; }
+.promo-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
+.promo-code { font-size: 32px; font-weight: 900; letter-spacing: 3px; font-family: 'Courier New', monospace; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 14px; }
+.promo-hint { font-size: 12.5px; color: var(--text-3); margin-top: 10px; }
+.maintenance-item { background: var(--bg-2); border-radius: 14px; padding: 18px 22px; margin-bottom: 12px; border: 1px solid var(--border); border-left: 4px solid var(--warning); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; transition: all 0.25s; }
+.maintenance-item.past { opacity: 0.5; border-left-color: var(--text-3); }
+.maintenance-info { flex: 1; min-width: 240px; }
+.maintenance-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.maintenance-time { font-size: 13px; color: var(--accent-2); font-family: 'Courier New', monospace; font-weight: 700; }
+.maintenance-desc { font-size: 12.5px; color: var(--text-3); margin-top: 4px; }
+.maintenance-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.idle-warning { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, rgba(255,176,32,0.95), rgba(243,156,18,0.95)); color: #1a1a2e; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; z-index: 5000; box-shadow: 0 15px 40px rgba(255,176,32,0.4); animation: idleIn 0.4s; display: flex; align-items: center; gap: 10px; }
+@keyframes idleIn { from { transform: translate(-50%, -20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-bottom: 40px; }
+.card { background: var(--bg-2); border-radius: 18px; padding: 28px; border: 1px solid var(--border); transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; overflow: hidden; }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gradient); transform: scaleX(0); transform-origin: left; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
+.card:hover::before { transform: scaleX(1); }
+.card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 25px 60px var(--accent-glow); }
+.card-icon { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, rgba(124, 92, 255, 0.2), rgba(0, 217, 255, 0.1)); border: 1px solid rgba(124, 92, 255, 0.35); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 18px; transition: transform 0.3s; }
+.card:hover .card-icon { transform: scale(1.1) rotate(-5deg); }
+.card h3 { color: var(--text); margin-bottom: 8px; font-size: 17px; font-weight: 700; }
+.card p { color: var(--text-2); font-size: 13.5px; line-height: 1.65; }
+@media (max-width: 720px) {
+    header { padding: 12px 16px; }
+    .logo-text { font-size: 16px; }
+    .logo-sub { display: none; }
+    nav { width: 100%; justify-content: center; }
+    .nav-btn { padding: 8px 11px; font-size: 12px; }
+    .utility-controls { width: 100%; justify-content: center; }
+    main { padding: 20px 16px; }
+    .hero { padding: 40px 10px 30px; }
+    .hero h1 { font-size: 32px; }
+    .form-container, .bot-container { padding: 24px; }
+    .form-row { grid-template-columns: 1fr; }
+    .ticket-actions { justify-content: stretch; }
+    .ticket-actions .btn { flex: 1; }
+    .modal { padding: 22px; }
+    .toast-container { right: 10px; left: 10px; }
+    .toast { min-width: auto; width: 100%; }
+    .admin-tabs { overflow-x: auto; }
+    .spec-card { flex-direction: column; align-items: stretch; }
+    .spec-actions { justify-content: stretch; }
+    .spec-actions .btn { flex: 1; }
+    .server-hero { padding: 24px; text-align: center; flex-direction: column; }
+    .server-hero-flag { font-size: 56px; }
+    .server-hero-stats { justify-content: center; width: 100%; }
+    .support-panel { padding: 22px; }
+    .wait-time-banner { padding: 18px; flex-direction: column; text-align: center; }
+    .wait-value { font-size: 22px; }
+    .promo-code { font-size: 24px; letter-spacing: 2px; }
+    .emoji-picker { grid-template-columns: repeat(8, 1fr); }
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<header>
+    <div class="logo" onclick="navigate('home')">
+        <div class="logo-icon">🎮</div>
+        <div>
+            <div class="logo-text">Fresnas Studio 2.0</div>
+            <div class="logo-sub">CRMP · SAMP · MTA</div>
+        </div>
+    </div>
+    <nav>
+        <button type="button" class="nav-btn" data-page="home" onclick="navigate('home')">🏠 Главная</button>
+        <button type="button" class="nav-btn" data-page="newTicket" onclick="navigate('newTicket')">📝 Обращение</button>
+        <button type="button" class="nav-btn" data-page="myTickets" onclick="navigate('myTickets')">📬 Тикеты</button>
+        <button type="button" class="nav-btn" data-page="referral" onclick="navigate('referral')">🎁 Рефералы</button>
+        <button type="button" class="nav-btn" data-page="faq" onclick="navigate('faq')">❓ FAQ</button>
+        <button type="button" class="nav-btn" data-page="admin" onclick="navigate('admin')">
+            🛡️ Панель <span class="nav-badge" id="adminBadge">0</span>
+        </button>
+    </nav>
+    <div class="utility-controls">
+        <button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+            <span class="icon" id="themeIcon">🌙</span>
+        </button>
+        <div class="lang-switcher">
+            <button type="button" class="lang-btn active" data-lang="ru" onclick="setLang('ru')">🇷🇺</button>
+            <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">🇬🇧</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+        <div class="hero">
+            <div class="status-pill" style="margin-bottom:20px;">Сервер Fresnas 2.0 онлайн</div>
+            <h1>Fresnas Studio 2.0<br>Центр поддержки</h1>
+            <p>Оперативная помощь по сборкам, плагинам, багам и настройке серверов CRMP / SAMP / MTA. Работаем 24/7.</p>
+            <div class="hero-badges">
+                <span class="badge by-flag">🇧🇾 Минск · СНГ</span>
+                <span class="badge">⚡ Ответ за 8 минут</span>
+                <span class="badge">🛡️ Anti-DDoS</span>
+                <span class="badge">⭐ CSAT-оценка</span>
+            </div>
+        </div>
+
+        <div id="maintenanceBannerContainer"></div>
+
+        <div class="support-panel" id="supportPanel">
+            <div class="support-header">
+                <div>
+                    <div class="support-title"><span>🛟</span><span>Поддержка онлайн</span></div>
+                    <div class="support-subtitle" id="supportSubtitle"></div>
+                </div>
+                <div class="support-stats-row" id="supportStatsRow"></div>
+            </div>
+            <div class="wait-time-banner" id="waitBanner">
+                <div class="wait-icon" id="waitIcon">⏱️</div>
+                <div class="wait-content">
+                    <div class="wait-label">Ожидаемое время ответа</div>
+                    <div class="wait-value" id="waitValue">—</div>
+                    <div class="wait-hint" id="waitHint"></div>
+                </div>
+            </div>
+            <div class="operators-grid" id="operatorsGrid"></div>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card" onclick="navigate('newTicket')">
+                <div class="card-icon">📝</div>
+                <h3>Новое обращение</h3>
+                <p>Сначала бот, потом оператор. Черновик автосохраняется</p>
+            </div>
+            <div class="card" onclick="navigate('myTickets')">
+                <div class="card-icon">📬</div>
+                <h3>Мои обращения</h3>
+                <p>Проверьте статус и продолжите диалог</p>
+            </div>
+            <div class="card" onclick="navigate('referral')">
+                <div class="card-icon">🎁</div>
+                <h3>Пригласи друга</h3>
+                <p>Скидка 15% на сборку тебе и другу</p>
+            </div>
+            <div class="card" onclick="navigate('faq')">
+                <div class="card-icon">❓</div>
+                <h3>База знаний</h3>
+                <p>Ответы на 90% вопросов по CRMP/SAMP/MTA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW TICKET -->
+    <div class="page" id="page-newTicket">
+        <div class="bot-container" id="botContainer">
+            <div class="bot-header">
+                <div class="bot-avatar">🤖</div>
+                <div class="bot-info">
+                    <h3>Помощник поддержки</h3>
+                    <p>Отвечу за 30 секунд — без ожидания оператора</p>
+                </div>
+            </div>
+            <div class="bot-progress" id="botProgress"></div>
+            <div class="bot-messages" id="botMessages"></div>
+            <div class="bot-options" id="botOptions"></div>
+            <div class="bot-actions" id="botActions"></div>
+        </div>
+
+        <div class="form-container hidden" id="ticketFormContainer">
+            <div class="form-title">
+                📝 Новое обращение
+                <span class="draft-indicator" id="draftIndicator">сохранено</span>
+            </div>
+            <div class="form-subtitle">Все поля со звёздочкой обязательны. Черновик сохраняется автоматически.</div>
+            <div id="ticketAlert" class="alert"></div>
+            <form id="ticketForm" onsubmit="createTicket(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ваше имя <span class="req">*</span></label>
+                        <input type="text" class="form-control" id="ticketName" required maxlength="60" placeholder="Иван Петров">
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="req">*</span></label>
+                        <input type="email" class="form-control" id="ticketEmail" required placeholder="ivan@fresnas.ru">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Категория <span class="req">*</span></label>
+                        <select class="form-control" id="ticketCategory" required>
+                            <option value="">— Выберите категорию —</option>
+                            <option value="Подключение">🔌 Подключение к серверу</option>
+                            <option value="Сборка">📦 Сборка / мод</option>
+                            <option value="Плагины">🧩 Плагины и скрипты</option>
+                            <option value="Баг">🐞 Баг / краш / вылет</option>
+                            <option value="Оплата">💳 Оплата и лицензия</option>
+                            <option value="Хостинг">🖥️ Хостинг / VPS</option>
+                            <option value="Аккаунт">👤 Аккаунт / доступ</option>
+                            <option value="Другое">💬 Другое</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Приоритет</label>
+                        <select class="form-control" id="ticketPriority">
+                            <option value="low">🟢 Низкий</option>
+                            <option value="normal" selected>🟡 Обычный</option>
+                            <option value="high">🟠 Высокий</option>
+                            <option value="urgent">🔴 Срочный</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Тема <span class="req">*</span></label>
+                    <input type="text" class="form-control" id="ticketSubject" required maxlength="120">
+                </div>
+                <div class="form-group">
+                    <label>Описание проблемы <span class="req">*</span></label>
+                    <textarea class="form-control" id="ticketMessage" required maxlength="2000" placeholder="Опишите подробно: платформа (CRMP/SAMP/MTA), версия, что уже пробовали..."></textarea>
+                    <div class="char-counter"><span id="msgCounter">0</span> / 2000</div>
+                </div>
+                <div class="form-group">
+                    <label>📎 Прикрепить файлы (до 3 шт., до 2 МБ)</label>
+                    <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+                        <div class="icon">📷</div>
+                        <div class="text">Кликните или перетащите файлы</div>
+                        <div class="hint">JPG, PNG, WEBP · скриншоты, логи</div>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="handleFileSelect(event)">
+                    <div class="file-preview-grid" id="filePreview"></div>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg btn-block">🚀 Отправить обращение</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MY TICKETS -->
+    <div class="page" id="page-myTickets">
+        <div class="form-container wide">
+            <div class="form-title">📬 Мои обращения</div>
+            <div class="form-subtitle">Введите email — увидите все обращения и переписку.</div>
+            <div class="form-group">
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input type="email" class="form-control" id="searchEmail" placeholder="ivan@fresnas.ru" style="flex:1; min-width:220px;">
+                    <button type="button" class="btn" onclick="searchMyTickets()">🔍 Найти</button>
+                    <button type="button" class="btn btn-outline" onclick="clearSearch()">Очистить</button>
+                </div>
+            </div>
+            <div id="myTicketsList">
+                <div class="empty-state">
+                    <div class="icon">📭</div>
+                    <h4>Введите email для поиска</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REFERRAL -->
+    <div class="page" id="page-referral">
+        <div class="referral-card">
+            <div class="referral-title"><span>🎁</span><span>Пригласи друга — получи скидку</span></div>
+            <div class="referral-desc">Поделись с другом — и вы оба получите <strong style="color:var(--pink);">скидку 15%</strong> на сборку или лицензию Fresnas Studio 2.0.</div>
+            <div class="referral-form">
+                <input type="email" class="form-control" id="referralEmail" placeholder="Ваш email">
+                <button type="button" class="btn" onclick="generatePromo()">🎫 Сгенерировать промокод</button>
+            </div>
+            <div id="promoResult"></div>
+            <div id="myPromosList" style="margin-top:24px;"></div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="page" id="page-faq">
+        <div class="form-container wide">
+            <div class="form-title">❓ База знаний</div>
+            <div class="form-subtitle">Кликните на вопрос, чтобы раскрыть ответ.</div>
+            <div id="faqList"></div>
+        </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="page" id="page-admin">
+        <div id="adminLogin">
+            <div class="auth-container">
+                <div class="auth-icon">🛡️</div>
+                <h2>Вход в панель</h2>
+                <p class="auth-sub">Доступ только для сотрудников Fresnas Studio</p>
+                <div id="loginAlert" class="alert"></div>
+                <div class="form-group">
+                    <label>Логин</label>
+                    <input type="text" class="form-control" id="adminUser" placeholder="Введите логин">
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" class="form-control" id="adminPass" placeholder="••••••••" onkeypress="if(event.key==='Enter')adminLogin()">
+                </div>
+                <button type="button" class="btn btn-block btn-lg" onclick="adminLogin()">🔓 Войти</button>
+            </div>
+        </div>
+
+        <div id="adminPanel" class="hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:24px;">
+                <div>
+                    <div class="form-title" style="margin-bottom:4px;">🛡️ Панель управления</div>
+                    <div class="form-subtitle" style="margin:0;">
+                        Вы вошли как: <strong id="operatorName">—</strong>
+                        <span id="roleBadge" style="margin-left:10px;"></span>
+                        <span id="idleTimer" style="margin-left:10px; font-size:12px; color:var(--text-3);"></span>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    <div class="my-status-switcher">
+                        <span class="label">Мой статус:</span>
+                        <button type="button" class="my-status-btn online" data-status="online" onclick="setMyStatus('online')">🟢 Онлайн</button>
+                        <button type="button" class="my-status-btn break" data-status="break" onclick="setMyStatus('break')">🟡 Перерыв</button>
+                        <button type="button" class="my-status-btn offline" data-status="offline" onclick="setMyStatus('offline')">🔴 Оффлайн</button>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="loadAdminData()">🔄</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="exportTickets()">📥 JSON</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="exportCSV()">📊 CSV</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="adminLogout()">🚪 Выйти</button>
+                </div>
+            </div>
+
+            <div class="admin-tabs">
+                <button type="button" class="admin-tab active" data-tab="tickets" onclick="switchAdminTab('tickets')">🎫 Тикеты</button>
+                <button type="button" class="admin-tab hidden" data-tab="specialists" id="tabSpecialists" onclick="switchAdminTab('specialists')">👥 Специалисты</button>
+                <button type="button" class="admin-tab" data-tab="schedule" onclick="switchAdminTab('schedule')">📅 Мой график</button>
+                <button type="button" class="admin-tab" data-tab="csat" onclick="switchAdminTab('csat')">⭐ CSAT</button>
+                <button type="button" class="admin-tab" data-tab="maintenance" onclick="switchAdminTab('maintenance')">🛠️ Тех-работы</button>
+                <button type="button" class="admin-tab" data-tab="referrals" onclick="switchAdminTab('referrals')">🎁 Рефералы</button>
+                <button type="button" class="admin-tab" data-tab="servers" onclick="switchAdminTab('servers')">🇧🇾 Сервер</button>
+            </div>
+
+            <div id="tab-tickets">
+                <div class="stats-grid">
+                    <div class="stat-card" data-filter="all" onclick="setFilter('all',this)">
+                        <div class="stat-num total" id="statTotal">0</div>
+                        <div class="stat-label">Всего</div>
+                    </div>
+                    <div class="stat-card" data-filter="open" onclick="setFilter('open',this)">
+                        <div class="stat-num open" id="statOpen">0</div>
+                        <div class="stat-label">Открытых</div>
+                    </div>
+                    <div class="stat-card" data-filter="progress" onclick="setFilter('progress',this)">
+                        <div class="stat-num progress" id="statProgress">0</div>
+                        <div class="stat-label">В работе</div>
+                    </div>
+                    <div class="stat-card" data-filter="closed" onclick="setFilter('closed',this)">
+                        <div class="stat-num closed" id="statClosed">0</div>
+                        <div class="stat-label">Закрытых</div>
+                    </div>
+                    <div class="stat-card" data-filter="urgent" onclick="setFilter('urgent',this)">
+                        <div class="stat-num urgent" id="statUrgent">0</div>
+                        <div class="stat-label">Срочных</div>
+                    </div>
+                </div>
+                <div class="filter-bar">
+                    <input type="text" class="form-control" id="adminSearch" placeholder="🔍 Поиск..." oninput="renderAdminTickets()">
+                    <select class="form-control" id="adminSort" onchange="renderAdminTickets()" style="min-width:170px;">
+                        <option value="new">Сначала новые</option>
+                        <option value="old">Сначала старые</option>
+                        <option value="priority">По приоритету</option>
+                    </select>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="clearAllTickets()">🗑 Очистить</button>
+                </div>
+                <div id="adminTicketsList"></div>
+            </div>
+
+            <div id="tab-specialists" class="hidden">
+                <div style="background: rgba(124,92,255,0.08); border: 1px solid rgba(124,92,255,0.3); border-radius: 14px; padding: 18px; margin-bottom: 22px;">
+                    <div style="font-weight: 700; margin-bottom: 6px;">🔒 Только для FRESNAS</div>
+                    <div style="color: var(--text-3); font-size: 13px;">Создавайте доступы для тех-специалистов. Они не видят эту вкладку.</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                    <h3 style="font-size:16px; font-weight:700;">👥 Команда</h3>
+                    <button type="button" class="btn btn-success btn-sm" onclick="openAddSpecModal()">➕ Добавить</button>
+                </div>
+                <div id="specList"></div>
+            </div>
+
+            <div id="tab-schedule" class="hidden">
+                <div style="background: rgba(0,217,255,0.08); border: 1px solid rgba(0,217,255,0.3); border-radius: 14px; padding: 18px; margin-bottom: 22px;">
+                    <div style="font-weight: 700; margin-bottom: 6px;">📅 Мой график работы</div>
+                    <div style="color: var(--text-3); font-size: 13px;">Клиент видит «Работает до 18:00» или «Выходной» в карточке оператора.</div>
+                </div>
+                <div id="scheduleEditor"></div>
+            </div>
+
+            <div id="tab-csat" class="hidden">
+                <div style="background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.3); border-radius: 14px; padding: 18px; margin-bottom: 22px;">
+                    <div style="font-weight: 700; margin-bottom: 6px;">⭐ Оценки клиентов (CSAT)</div>
+                    <div style="color: var(--text-3); font-size: 13px;">Клиенты ставят звёзды после закрытия тикета.</div>
+                </div>
+                <div id="csatStats"></div>
+            </div>
+
+            <div id="tab-maintenance" class="hidden">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+                    <h3 style="font-size:16px; font-weight:700;">📅 Тех-работы</h3>
+                    <button type="button" class="btn btn-success btn-sm" onclick="openAddMaintenanceModal()">➕ Добавить</button>
+                </div>
+                <div id="maintenanceList"></div>
+            </div>
+
+            <div id="tab-referrals" class="hidden">
+                <div id="referralsList"></div>
+            </div>
+
+            <div id="tab-servers" class="hidden">
+                <div class="server-hero">
+                    <div class="server-hero-flag">🇧🇾</div>
+                    <div class="server-hero-info">
+                        <div class="server-hero-title">Fresnas BY #1</div>
+                        <div class="server-hero-sub">Минск, Беларусь · CRMP + SAMP + MTA · Anti-DDoS</div>
+                    </div>
+                    <div class="server-hero-stats">
+                        <div class="server-hero-stat"><div class="v" id="byPing">—</div><div class="l">Пинг</div></div>
+                        <div class="server-hero-stat"><div class="v" id="byLoad">—</div><div class="l">Нагрузка</div></div>
+                        <div class="server-hero-stat"><div class="v">99.9%</div><div class="l">Аптайм</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>© 2026 Fresnas Studio 2.0 · CRMP / SAMP / MTA</footer>
+
+<script>
+/* ================= CONFIG ================= */
+const STORAGE_KEY = 'fresnas_tickets_v11';
+const SPECS_STORAGE_KEY = 'fresnas_specs_v8';
+const STATUS_STORAGE_KEY = 'fresnas_status_v5';
+const MAINTENANCE_STORAGE_KEY = 'fresnas_maintenance_v2';
+const REFERRALS_STORAGE_KEY = 'fresnas_referrals_v2';
+const NOTES_STORAGE_KEY = 'fresnas_notes_v1';
+const SCHEDULES_STORAGE_KEY = 'fresnas_schedules_v1';
+const CSAT_STORAGE_KEY = 'fresnas_csat_v1';
+const DRAFT_STORAGE_KEY = 'fresnas_draft_v1';
+const TYPING_STORAGE_KEY = 'fresnas_typing_v1';
+const THEME_KEY = 'fresnas_theme';
+const LANG_KEY = 'fresnas_lang';
+
+const MAIN_ADMIN = { login: 'FRESNAS', password: '224248600', name: 'FRESNAS', role: 'owner' };
+const IDLE_TIMEOUT_MS = 30 * 60 * 1000;
+const IDLE_WARNING_MS = 29 * 60 * 1000;
+const DRAFT_AUTOSAVE_MS = 3000;
+const TYPING_TIMEOUT_MS = 3000;
+
+const SERVERS = [{ id: 'fresnas-by-1', country: 'Беларусь', flag: '🇧🇾', city: 'Минск', name: 'Fresnas BY #1', basePing: 18 }];
+let serverLoads = {}, serverPings = {};
+function initServerStats() {
+    SERVERS.forEach(s => { serverLoads[s.id] = 15 + Math.floor(Math.random() * 60); serverPings[s.id] = s.basePing + Math.floor(Math.random() * 15) - 5; });
+}
+
+/* ================= STATE ================= */
+let tickets = [], specialists = [], operatorStatuses = {}, maintenances = [], referrals = [], notes = {}, schedules = {}, csats = [];
+let currentUser = null, currentFilter = 'all', currentAdminTab = 'tickets';
+let presenceInterval = null, idleCheckInterval = null, idleWarningShown = false, lastActivity = Date.now();
+let currentLang = 'ru', currentTheme = 'dark';
+let botState = { step: 0, answers: [], finished: false, solution: null };
+let currentTicketFiles = [];
+let draftTimer = null, typingTimer = null, typingCheckInterval = null;
+let idleListenersAttached = false;
+
+/* ================= THEME ================= */
+function applyTheme(theme) {
+    currentTheme = theme;
+    if (theme === 'light') document.body.classList.add('light-theme');
+    else document.body.classList.remove('light-theme');
+    const ti = document.getElementById('themeIcon');
+    if (ti) ti.textContent = theme === 'light' ? '☀️' : '🌙';
+}
+function toggleTheme() {
+    const nt = currentTheme === 'dark' ? 'light' : 'dark';
+    const btn = document.getElementById('themeToggle');
+    if (btn) {
+        btn.classList.add('rotating');
+        setTimeout(() => btn.classList.remove('rotating'), 500);
+    }
+    applyTheme(nt);
+    localStorage.setItem(THEME_KEY, nt);
+    toast(nt === 'light' ? '☀️ Светлая тема' : '🌙 Тёмная тема', 'info', 1500);
+}
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem(LANG_KEY, lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    toast(lang === 'ru' ? 'Язык: Русский' : 'Language: English', 'info', 1500);
+}
+
+/* ================= STORAGE ================= */
+function loadAll() {
+    try { tickets = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { tickets = []; }
+    try { specialists = JSON.parse(localStorage.getItem(SPECS_STORAGE_KEY) || '[]'); } catch { specialists = []; }
+    try { operatorStatuses = JSON.parse(localStorage.getItem(STATUS_STORAGE_KEY) || '{}'); } catch { operatorStatuses = {}; }
+    try { maintenances = JSON.parse(localStorage.getItem(MAINTENANCE_STORAGE_KEY) || '[]'); } catch { maintenances = []; }
+    try { referrals = JSON.parse(localStorage.getItem(REFERRALS_STORAGE_KEY) || '[]'); } catch { referrals = []; }
+    try { notes = JSON.parse(localStorage.getItem(NOTES_STORAGE_KEY) || '{}'); } catch { notes = {}; }
+    try { schedules = JSON.parse(localStorage.getItem(SCHEDULES_STORAGE_KEY) || '{}'); } catch { schedules = {}; }
+    try { csats = JSON.parse(localStorage.getItem(CSAT_STORAGE_KEY) || '[]'); } catch { csats = []; }
+}
+function save(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+function saveTickets() { save(STORAGE_KEY, tickets); updateNavBadge(); }
+function saveSpecs() { save(SPECS_STORAGE_KEY, specialists); }
+function saveStatuses() { save(STATUS_STORAGE_KEY, operatorStatuses); }
+function saveMaintenances() { save(MAINTENANCE_STORAGE_KEY, maintenances); }
+function saveReferrals() { save(REFERRALS_STORAGE_KEY, referrals); }
+function saveNotes() { save(NOTES_STORAGE_KEY, notes); }
+function saveSchedules() { save(SCHEDULES_STORAGE_KEY, schedules); }
+function saveCsats() { save(CSAT_STORAGE_KEY, csats); }
+
+/* ================= NAV ================= */
+function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page)?.classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (page === 'admin' && currentUser) loadAdminData();
+    if (page === 'home') { renderSupportPanel(); renderMaintenanceBanner(); }
+    if (page === 'faq') renderFaq();
+    if (page === 'referral') renderMyPromos();
+    if (page === 'newTicket') { initBot(); restoreDraft(); }
+}
+
+function updateNavBadge() {
+    const badge = document.getElementById('adminBadge');
+    if (!badge) return;
+    const openCount = tickets.filter(t => t.status === 'open').length;
+    if (currentUser && openCount > 0) {
+        badge.textContent = openCount;
+        badge.classList.add('show');
+    } else {
+        badge.classList.remove('show');
+    }
+}
+
+/* ================= TOAST ================= */
+function toast(msg, type = 'info', duration = 3500) {
+    const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.innerHTML = `<div class="toast-icon">${icons[type]}</div><div class="toast-msg">${escapeHtml(msg)}</div>`;
+    container.appendChild(el);
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, duration);
+}
+function showAlert(id, text, type) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+    el.innerHTML = `<span>${icons[type]}</span><span>${escapeHtml(text)}</span>`;
+    el.className = 'alert alert-' + type + ' show';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.classList.remove('show'), 5000);
+}
+function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso), now = new Date(), diff = (now - d) / 1000;
+    if (diff < 60) return 'только что';
+    if (diff < 3600) return Math.floor(diff / 60) + ' мин назад';
+    if (diff < 86400) return Math.floor(diff / 3600) + ' ч назад';
+    return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+function formatDateFull(iso) { return new Date(iso).toLocaleString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+
+/* ================= DRAFT AUTOSAVE ================= */
+function saveDraft() {
+    const draft = {
+        name: document.getElementById('ticketName')?.value || '',
+        email: document.getElementById('ticketEmail')?.value || '',
+        category: document.getElementById('ticketCategory')?.value || '',
+        priority: document.getElementById('ticketPriority')?.value || 'normal',
+        subject: document.getElementById('ticketSubject')?.value || '',
+        message: document.getElementById('ticketMessage')?.value || '',
+        savedAt: new Date().toISOString()
+    };
+    if (draft.name || draft.email || draft.subject || draft.message) {
+        localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+        const ind = document.getElementById('draftIndicator');
+        if (ind) {
+            ind.classList.add('show');
+            clearTimeout(ind._t);
+            ind._t = setTimeout(() => ind.classList.remove('show'), 2000);
+        }
+    }
+}
+function restoreDraft() {
+    try {
+        const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (!raw) return;
+        const d = JSON.parse(raw);
+        if (!d.savedAt) return;
+        const age = (Date.now() - new Date(d.savedAt).getTime()) / 3600000;
+        if (age > 72) { localStorage.removeItem(DRAFT_STORAGE_KEY); return; }
+        const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+        setVal('ticketName', d.name);
+        setVal('ticketEmail', d.email);
+        setVal('ticketCategory', d.category);
+        setVal('ticketPriority', d.priority || 'normal');
+        setVal('ticketSubject', d.subject);
+        setVal('ticketMessage', d.message);
+        const mc = document.getElementById('msgCounter');
+        if (mc) mc.textContent = (d.message || '').length;
+        if (d.name || d.subject || d.message) toast('💾 Черновик восстановлен', 'info', 3000);
+    } catch {}
+}
+function clearDraft() {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    const ind = document.getElementById('draftIndicator');
+    if (ind) ind.classList.remove('show');
+}
+function startDraftAutosave() {
+    if (draftTimer) clearInterval(draftTimer);
+    draftTimer = setInterval(saveDraft, DRAFT_AUTOSAVE_MS);
+}
+['ticketName', 'ticketEmail', 'ticketCategory', 'ticketPriority', 'ticketSubject', 'ticketMessage'].forEach(id => {
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', saveDraft);
+            el.addEventListener('change', saveDraft);
+        }
+    });
+});
+
+/* ================= TYPING INDICATOR ================= */
+function setTyping(who, ticketId) {
+    try {
+        const raw = localStorage.getItem(TYPING_STORAGE_KEY);
+        const data = raw ? JSON.parse(raw) : {};
+        if (who) data[ticketId] = { who, until: Date.now() + TYPING_TIMEOUT_MS };
+        else delete data[ticketId];
+        localStorage.setItem(TYPING_STORAGE_KEY, JSON.stringify(data));
+    } catch {}
+}
+function getTyping(ticketId) {
+    try {
+        const raw = localStorage.getItem(TYPING_STORAGE_KEY);
+        const data = raw ? JSON.parse(raw) : {};
+        const entry = data[ticketId];
+        if (!entry) return null;
+        if (Date.now() > entry.until) { delete data[ticketId]; localStorage.setItem(TYPING_STORAGE_KEY, JSON.stringify(data)); return null; }
+        return entry.who;
+    } catch { return null; }
+}
+function startTypingWatcher() {
+    if (typingCheckInterval) clearInterval(typingCheckInterval);
+    typingCheckInterval = setInterval(() => {
+        document.querySelectorAll('[data-typing-ticket]').forEach(el => {
+            const ticketId = el.dataset.typingTicket;
+            const typing = getTyping(ticketId);
+            if (typing && typing !== 'me') {
+                el.innerHTML = `<div class="typing-indicator">
+                    <span>⌨️ ${typing === 'support' ? 'Оператор' : 'Клиент'} печатает</span>
+                    <span class="typing-dots"><span></span><span></span><span></span></span>
+                </div>`;
+            } else {
+                el.innerHTML = '';
+            }
+        });
+    }, 800);
+}
+
+/* ================= CHAT-BOT ================= */
+const BOT_SCENARIOS = {
+    connect: { options: [
+        { emoji: '📱', text: 'Сервер не подключается / оффлайн', next: 'connect_not' },
+        { emoji: '🔄', text: 'Постоянно выкидывает / рестарты', next: 'connect_drop' },
+        { emoji: '🌐', text: 'Лаунчер не видит сервер', next: 'connect_launcher' }
+    ]},
+    build: { options: [
+        { emoji: '📦', text: 'Не могу установить сборку', next: 'build_install' },
+        { emoji: '🔄', text: 'Сборка крашится при запуске', next: 'build_crash' },
+        { emoji: '🧩', text: 'Мод не загружается', next: 'build_mod' }
+    ]},
+    plugins: { options: [
+        { emoji: '🔌', text: 'Плагин не работает', next: 'plugins_notWork' },
+        { emoji: '💥', text: 'Ошибка в логе / краш сервера', next: 'plugins_log' },
+        { emoji: '🛠️', text: 'Нужна помощь с написанием', next: 'plugins_help' }
+    ]},
+    bug: { options: [
+        { emoji: '🐞', text: 'Вылет / краш игры', next: 'bug_crash' },
+        { emoji: '🧱', text: 'Проблема с картой / объектами', next: 'bug_map' },
+        { emoji: '📊', text: 'Ошибка в игровом процессе', next: 'bug_gameplay' }
+    ]},
+    payment: { options: [
+        { emoji: '❓', text: 'Оплатил, но доступа нет', next: 'pay_notActivated' },
+        { emoji: '❌', text: 'Оплата не проходит', next: 'pay_failed' },
+        { emoji: '💸', text: 'Хочу вернуть деньги', next: 'pay_refund' }
+    ]},
+    hosting: { options: [
+        { emoji: '🖥️', text: 'Как перенести сервер на хостинг?', next: 'hosting_migrate' },
+        { emoji: '🔐', text: 'Не могу зайти на VPS / панель', next: 'hosting_access' },
+        { emoji: '⚙️', text: 'Настройка под CRMP/SAMP/MTA', next: 'hosting_setup' }
+    ]},
+    account: { options: [
+        { emoji: '👤', text: 'Забыл пароль от аккаунта', next: 'account_pass' },
+        { emoji: '🔒', text: 'Аккаунт заблокирован', next: 'account_block' },
+        { emoji: '📧', text: 'Сменить почту / данные', next: 'account_change' }
+    ]},
+    other: { options: [{ emoji: '📝', text: 'Создать тикет', next: 'final_ticket' }] }
+};
+const BOT_SOLUTIONS = {
+    connect_not: { title: 'Проверьте базовые настройки', content: `<ol><li><strong>Перезапустите лаунчер</strong> и игру</li><li>Проверьте, что сервер <strong>Fresnas BY #1</strong> запущен</li><li>Попробуйте подключиться через <strong>прямой IP</strong></li><li>Проверьте интернет без VPN</li></ol>` },
+    connect_drop: { title: 'Соединение нестабильно', content: `<ol><li>Включите <strong>стабильный интернет</strong> (кабель / Wi-Fi 5 ГГц)</li><li>Отключите <strong>VPN и прокси</strong></li><li>Закройте фоновые загрузки (торренты, обновления)</li></ol>` },
+    connect_launcher: { title: 'Лаунчер не видит сервер', content: `<ol><li>Обновите <strong>список серверов</strong> в лаунчере</li><li>Добавьте сервер вручную: <strong>IP: play.fresnas.ru:7777</strong></li><li>Проверьте файл <strong>hosts</strong> на блокировки</li></ol>` },
+    build_install: { title: 'Установка сборки', content: `<ol><li>Скачайте архив <strong>Fresnas Studio 2.0</strong> с официального сайта</li><li>Распакуйте в <strong>отдельную папку</strong></li><li>Запустите <strong>установщик от администратора</strong></li></ol>` },
+    build_crash: { title: 'Сборка крашится', content: `<ol><li>Проверьте <strong>целостность файлов</strong> через лаунчер</li><li>Удалите конфликтующие <strong>ASI / CLEO / ModLoader</strong> моды</li><li>Сделайте <strong>чистую установку</strong> GTA:SA + SAMP</li></ol>` },
+    build_mod: { title: 'Мод не загружается', content: `<ol><li>Проверьте, что мод <strong>совместим с версией</strong> игры</li><li>Убедитесь, что он лежит в правильной папке</li><li>Запустите игру <strong>от имени администратора</strong></li></ol>` },
+    plugins_notWork: { title: 'Плагин не работает', content: `<ol><li>Проверьте <strong>синтаксис</strong> и логи сервера</li><li>Убедитесь, что плагин <strong>загружен</strong> в server.cfg / mtaserver.conf</li><li>Обновите <strong>Pawn / Lua</strong> до актуальной версии</li></ol>` },
+    plugins_log: { title: 'Ошибка в логе / краш', content: `<ol><li>Пришлите <strong>полный лог</strong> в тикет</li><li>Укажите <strong>строку ошибки</strong> и версию плагина</li><li>Временно отключите подозрительный плагин</li></ol>` },
+    plugins_help: { title: 'Помощь с плагином', content: `<p>Напишите в тикет: <strong>что нужно сделать</strong>, <strong>какая платформа</strong> (CRMP/SAMP/MTA) и <strong>бюджет/сроки</strong>.</p>` },
+    bug_crash: { title: 'Вылет / краш игры', content: `<ol><li>Пришлите <strong>crash-лог</strong> или скриншот</li><li>Укажите, <strong>при каких действиях</strong> происходит вылет</li><li>Попробуйте <strong>чистую сборку</strong> без модов</li></ol>` },
+    bug_map: { title: 'Проблема с картой / объектами', content: `<ol><li>Пришлите <strong>скриншот</strong> и координаты</li><li>Укажите <strong>ID объекта</strong>, если известен</li><li>Проверьте, не конфликтует ли <strong>другой мод</strong> на карту</li></ol>` },
+    bug_gameplay: { title: 'Ошибка в игровом процессе', content: `<ol><li>Опишите <strong>шаги воспроизведения</strong></li><li>Приложите <strong>видео или скриншоты</strong></li><li>Укажите <strong>версию сервера</strong> и режим</li></ol>` },
+    pay_notActivated: { title: 'Доступ не активировался', content: `<ol><li>Подождите <strong>5–10 минут</strong></li><li>Перезапустите лаунчер / игру</li><li>Проверьте <strong>почту и спам</strong></li><li>Если 15+ мин — создайте <strong>тикет</strong></li></ol>` },
+    pay_failed: { title: 'Оплата не проходит', content: `<ol><li>Проверьте <strong>лимиты карты</strong></li><li>Попробуйте <strong>СБП или крипту</strong></li><li>Отключите <strong>VPN во время оплаты</strong></li></ol>` },
+    pay_refund: { title: 'Возврат средств', content: `<p>Возврат возможен в течение <strong>7 дней</strong> при технической невозможности оказания услуги. Напишите в поддержку с <strong>номером транзакции</strong>.</p>` },
+    hosting_migrate: { title: 'Перенос на хостинг', content: `<ol><li>Сделайте <strong>бэкап gamemode и базы</strong></li><li>Перенесите файлы через <strong>FTP/SFTP</strong></li><li>Настройте <strong>порт и IP</strong> в конфиге</li><li>Запустите через <strong>панель хостинга</strong></li></ol>` },
+    hosting_access: { title: 'Доступ к VPS / панели', content: `<ol><li>Проверьте <strong>логин и пароль</strong> из письма</li><li>Сбросьте пароль через <strong>почту</strong></li><li>Если не помогает — тикет с <strong>номером заказа</strong></li></ol>` },
+    hosting_setup: { title: 'Настройка под CRMP/SAMP/MTA', content: `<ol><li>Выберите нужный <strong>образ сервера</strong> в панели</li><li>Загрузите <strong>gamemode</strong> и настройте <strong>server.cfg</strong> / <strong>mtaserver.conf</strong></li><li>Откройте <strong>порты</strong> в фаерволе</li></ol>` },
+    account_pass: { title: 'Восстановление пароля', content: `<ol><li>Нажмите <strong>«Забыли пароль»</strong> в лаунчере</li><li>Введите <strong>email</strong> от аккаунта</li><li>Проверьте <strong>почту и спам</strong></li></ol>` },
+    account_block: { title: 'Аккаунт заблокирован', content: `<p>Напишите в тикет с <strong>логином</strong> и <strong>причиной</strong> блокировки. Мы рассмотрим обращение в течение 24 часов.</p>` },
+    account_change: { title: 'Смена данных', content: `<ol><li>Пришлите в тикет <strong>старые и новые данные</strong></li><li>Подтвердите владение <strong>почтой</strong></li><li>После проверки мы сменим данные</li></ol>` }
+};
+
+function initBot() {
+    botState = { step: 0, answers: [], finished: false, solution: null };
+    renderBot();
+}
+
+function renderBot() {
+    const progress = document.getElementById('botProgress');
+    const messages = document.getElementById('botMessages');
+    const options = document.getElementById('botOptions');
+    const actions = document.getElementById('botActions');
+    if (!progress || !messages || !options || !actions) return;
+
+    if (botState.finished && botState.solution) {
+        progress.innerHTML = `<div class="bot-progress-step done"></div><div class="bot-progress-step done"></div><div class="bot-progress-step done"></div><span class="bot-progress-label">Готово ✅</span>`;
+        messages.innerHTML = `<div class="bot-message"><strong>Вот что мы нашли:</strong></div><div class="bot-solution"><div class="bot-solution-header"><span>✅</span><span>${botState.solution.title}</span></div><div class="bot-solution-content">${botState.solution.content}</div></div>`;
+        options.innerHTML = '';
+        actions.innerHTML = `<button type="button" class="btn btn-success" onclick="botSolved()">✅ Помогло!</button><button type="button" class="btn btn-outline" onclick="botNotSolved()">❌ Не помогло — создать тикет</button>`;
+        return;
+    }
+
+    const currentStep = botState.step + 1;
+    progress.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const cls = i < botState.step ? 'done' : i === botState.step ? 'current' : '';
+        progress.innerHTML += `<div class="bot-progress-step ${cls}"></div>`;
+    }
+    progress.innerHTML += `<span class="bot-progress-label">Шаг ${currentStep} из 3</span>`;
+
+    let dialog = '<div class="bot-message"><strong>Привет! Помогу за 30 секунд. Ответь на 3 вопроса 🤖</strong></div>';
+    botState.answers.forEach(a => {
+        dialog += `<div class="bot-message me">${a.emoji} ${escapeHtml(a.text)}</div>`;
+    });
+    messages.innerHTML = dialog;
+
+    if (botState.step === 0) {
+        options.innerHTML = `
+            <button type="button" class="bot-option" onclick="botAnswer('connect','🔌','Подключение к серверу')"><span class="emoji">🔌</span> Подключение к серверу</button>
+            <button type="button" class="bot-option" onclick="botAnswer('build','📦','Сборка / мод')"><span class="emoji">📦</span> Сборка / мод</button>
+            <button type="button" class="bot-option" onclick="botAnswer('plugins','🧩','Плагины и скрипты')"><span class="emoji">🧩</span> Плагины и скрипты</button>
+            <button type="button" class="bot-option" onclick="botAnswer('bug','🐞','Баг / краш / вылет')"><span class="emoji">🐞</span> Баг / краш / вылет</button>
+            <button type="button" class="bot-option" onclick="botAnswer('payment','💳','Оплата и лицензия')"><span class="emoji">💳</span> Оплата и лицензия</button>
+            <button type="button" class="bot-option" onclick="botAnswer('hosting','🖥️','Хостинг / VPS')"><span class="emoji">🖥️</span> Хостинг / VPS</button>
+            <button type="button" class="bot-option" onclick="botAnswer('account','👤','Аккаунт / доступ')"><span class="emoji">👤</span> Аккаунт / доступ</button>
+            <button type="button" class="bot-option" onclick="botAnswer('other','💬','Другое')"><span class="emoji">💬</span> Другое</button>`;
+        actions.innerHTML = `<button type="button" class="btn btn-outline" onclick="skipBot()">Пропустить → к форме</button>`;
+        return;
+    }
+    if (botState.step === 1) {
+        const cat = botState.answers[0].key;
+        const scenario = BOT_SCENARIOS[cat];
+        if (!scenario) { botNotSolved(); return; }
+        options.innerHTML = scenario.options.map(o => `<button type="button" class="bot-option" onclick="botSubAnswer('${o.next}','${o.emoji}','${escapeHtml(o.text)}')"><span class="emoji">${o.emoji}</span> ${escapeHtml(o.text)}</button>`).join('');
+        actions.innerHTML = `<button type="button" class="btn btn-outline btn-sm" onclick="botBack()">← Назад</button>`;
+        return;
+    }
+    if (botState.step === 2) {
+        const solKey = botState.answers[1].key;
+        if (solKey === 'final_ticket') { botNotSolved(); return; }
+        const sol = BOT_SOLUTIONS[solKey];
+        if (sol) { botState.solution = sol; botState.finished = true; renderBot(); }
+        else botNotSolved();
+    }
+}
+function botAnswer(key, emoji, text) { botState.answers.push({ key, emoji, text }); botState.step = 1; renderBot(); }
+function botSubAnswer(nextKey, emoji, text) { botState.answers.push({ key: nextKey, emoji, text }); botState.step = 2; setTimeout(renderBot, 400); }
+function botBack() { botState.answers.pop(); botState.step = 0; renderBot(); }
+function botSolved() { toast('Рады помочь! 🎉', 'success'); setTimeout(() => navigate('home'), 1500); }
+function botNotSolved() {
+    document.getElementById('botContainer')?.classList.add('hidden');
+    document.getElementById('ticketFormContainer')?.classList.remove('hidden');
+    const map = { connect: 'Подключение', build: 'Сборка', plugins: 'Плагины', bug: 'Баг', payment: 'Оплата', hosting: 'Хостинг', account: 'Аккаунт' };
+    if (botState.answers[0]) {
+        const cat = map[botState.answers[0].key];
+        const catEl = document.getElementById('ticketCategory');
+        if (cat && catEl) catEl.value = cat;
+        const subj = botState.answers.map(a => a.text).join(' → ');
+        const subjEl = document.getElementById('ticketSubject');
+        if (subjEl) subjEl.value = subj.substring(0, 120);
+    }
+    restoreDraft();
+    startDraftAutosave();
+}
+function skipBot() {
+    document.getElementById('botContainer')?.classList.add('hidden');
+    document.getElementById('ticketFormContainer')?.classList.remove('hidden');
+    restoreDraft();
+    startDraftAutosave();
+}
+
+/* ================= FILE UPLOAD ================= */
+document.addEventListener('DOMContentLoaded', () => {
+    const area = document.getElementById('fileUploadArea');
+    if (area) {
+        area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragging'); });
+        area.addEventListener('dragleave', () => area.classList.remove('dragging'));
+        area.addEventListener('drop', e => { e.preventDefault(); area.classList.remove('dragging'); handleFiles(e.dataTransfer.files); });
+    }
+});
+function handleFileSelect(e) { handleFiles(e.target.files); e.target.value = ''; }
+function handleFiles(files) {
+    const maxSize = 2 * 1024 * 1024, maxCount = 3;
+    for (const file of Array.from(files)) {
+        if (currentTicketFiles.length >= maxCount) { toast(`Максимум ${maxCount}`, 'warning'); break; }
+        if (!file.type.startsWith('image/')) { toast('Только изображения', 'warning'); continue; }
+        if (file.size > maxSize) { toast(`${file.name} > 2 МБ`, 'warning'); continue; }
+        const reader = new FileReader();
+        reader.onload = e => { currentTicketFiles.push({ name: file.name, size: file.size, data: e.target.result }); renderFilePreview(); };
+        reader.readAsDataURL(file);
+    }
+}
+function renderFilePreview() {
+    const fp = document.getElementById('filePreview');
+    if (!fp) return;
+    fp.innerHTML = currentTicketFiles.map((f, i) => `
+        <div class="file-preview-item">
+            <img src="${f.data}" onclick="viewImage('${f.data}')">
+            <button type="button" class="remove" onclick="removeFile(${i})">✕</button>
+        </div>`).join('');
+}
+function removeFile(i) { currentTicketFiles.splice(i, 1); renderFilePreview(); }
+function viewImage(data) {
+    const v = document.createElement('div');
+    v.className = 'image-viewer';
+    v.onclick = () => v.remove();
+    v.innerHTML = `<img src="${data}">`;
+    document.body.appendChild(v);
+}
+
+/* ================= TICKETS ================= */
+function createTicket(e) {
+    e.preventDefault();
+    const name = document.getElementById('ticketName').value.trim();
+    const email = document.getElementById('ticketEmail').value.trim().toLowerCase();
+    const category = document.getElementById('ticketCategory').value;
+    const priority = document.getElementById('ticketPriority').value;
+    const subject = document.getElementById('ticketSubject').value.trim();
+    const message = document.getElementById('ticketMessage').value.trim();
+    if (!name || !email || !category || !subject || !message) { showAlert('ticketAlert', 'Заполните поля', 'error'); return; }
+    const ticket = {
+        id: 'FRS-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 4).toUpperCase(),
+        name, email, category, priority, subject, message,
+        status: 'open', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        replies: [], handledBy: null, attachments: currentTicketFiles.slice(0, 3),
+        rating: null, ratingComment: null
+    };
+    tickets.unshift(ticket);
+    saveTickets();
+    document.getElementById('ticketForm').reset();
+    document.getElementById('msgCounter').textContent = '0';
+    currentTicketFiles = [];
+    renderFilePreview();
+    clearDraft();
+    document.getElementById('ticketFormContainer').classList.add('hidden');
+    initBot();
+    document.getElementById('botContainer').classList.remove('hidden');
+    showAlert('ticketAlert', `Обращение ${ticket.id} создано!`, 'success');
+    toast(`Тикет ${ticket.id} создан`, 'success');
+    setTimeout(() => {
+        document.getElementById('searchEmail').value = email;
+        navigate('myTickets');
+        searchMyTickets();
+    }, 1500);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const tm = document.getElementById('ticketMessage');
+    if (tm) tm.addEventListener('input', e => {
+        const mc = document.getElementById('msgCounter');
+        if (mc) mc.textContent = e.target.value.length;
+        saveDraft();
+    });
+});
+
+function searchMyTickets() {
+    const email = document.getElementById('searchEmail').value.trim().toLowerCase();
+    const list = document.getElementById('myTicketsList');
+    if (!email) { list.innerHTML = `<div class="empty-state"><div class="icon">📧</div><h4>Введите email</h4></div>`; return; }
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) { list.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><h4>Некорректный email</h4></div>`; return; }
+    const found = tickets.filter(t => t.email.toLowerCase() === email).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    if (found.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h4>Обращений нет</h4><button type="button" class="btn" style="margin-top:16px;" onclick="navigate('newTicket')">📝 Создать</button></div>`;
+        return;
+    }
+    list.innerHTML = `<div style="color:var(--text-3); font-size:13px; margin-bottom:14px;">Найдено: <strong style="color:var(--accent-2);">${found.length}</strong></div>` + found.map(tk => renderTicketCard(tk, false)).join('');
+}
+function clearSearch() {
+    document.getElementById('searchEmail').value = '';
+    document.getElementById('myTicketsList').innerHTML = `<div class="empty-state"><div class="icon">📭</div><h4>Введите email</h4></div>`;
+}
+
+function renderTicketCard(tk, adminView) {
+    const statusNames = { open: 'Открыто', progress: 'В работе', closed: 'Закрыто', rejected: 'Отклонено' };
+    const priorityNames = { low: '🟢 Низкий', normal: '🟡 Обычный', high: '🟠 Высокий', urgent: '🔴 Срочный' };
+    const date = formatDate(tk.createdAt);
+    const replyCount = (tk.replies || []).length;
+    let handledBy = tk.handledBy ? `<span>👨‍💻 ${escapeHtml(tk.handledBy)}</span>` : '';
+    const attCount = (tk.attachments || []).length;
+    let attHtml = '';
+    if (attCount > 0) attHtml = `<div class="ticket-attachments">${tk.attachments.map(a => `<img class="ticket-attachment-thumb" src="${a.data}" onclick="event.stopPropagation(); viewImage('${a.data}')">`).join('')}</div>`;
+    const noteCount = (notes[tk.id] || []).length;
+    let notesBadge = '';
+    if (adminView && noteCount > 0) notesBadge = `<span class="ticket-notes-badge">📝 ${noteCount} заметок</span>`;
+    let ratingBadge = '';
+    if (tk.rating) ratingBadge = `<span class="ticket-rating-badge">⭐ ${tk.rating}/5</span>`;
+
+    let actions = '';
+    if (adminView) {
+        actions = `<div class="ticket-actions">
+            ${tk.status !== 'progress' ? `<button type="button" class="btn btn-sm btn-warning" onclick="event.stopPropagation(); setStatus('${tk.id}','progress')">▶ В работу</button>` : ''}
+            ${tk.status !== 'closed' ? `<button type="button" class="btn btn-sm btn-success" onclick="event.stopPropagation(); setStatus('${tk.id}','closed')">✓ Закрыть</button>` : ''}
+            ${tk.status !== 'rejected' ? `<button type="button" class="btn btn-sm btn-danger" onclick="event.stopPropagation(); setStatus('${tk.id}','rejected')">✕</button>` : ''}
+            <button type="button" class="btn btn-sm" onclick="event.stopPropagation(); openReplyModal('${tk.id}')">💬 Ответить</button>
+            <button type="button" class="btn btn-sm btn-outline" onclick="event.stopPropagation(); exportChatTXT('${tk.id}')">📥</button>
+            <button type="button" class="btn btn-sm btn-outline" onclick="event.stopPropagation(); deleteTicket('${tk.id}')">🗑</button>
+        </div>`;
+    } else {
+        actions = `<div class="ticket-actions">
+            <button type="button" class="btn btn-sm" onclick="openTicketView('${tk.id}')">👁 Открыть ${replyCount ? `(${replyCount})` : ''}</button>
+            <button type="button" class="btn btn-sm btn-outline" onclick="exportChatTXT('${tk.id}')">📥 Скачать</button>
+        </div>`;
+    }
+    return `
+        <div class="ticket status-${tk.status} ${tk.priority === 'urgent' ? 'status-urgent' : ''}">
+            <div class="ticket-header">
+                <div class="ticket-subject">${escapeHtml(tk.subject)}</div>
+                <span class="status-tag ${tk.status}">${statusNames[tk.status]}</span>
+            </div>
+            <div class="ticket-meta">
+                <span>🎫 ${tk.id}</span>
+                <span>👤 ${escapeHtml(tk.name)}</span>
+                <span>📧 ${escapeHtml(tk.email)}</span>
+                <span>📁 ${escapeHtml(tk.category)}</span>
+                <span>${priorityNames[tk.priority] || priorityNames.normal}</span>
+                ${handledBy}
+                <span>🕐 ${date}</span>
+                ${replyCount ? `<span>💬 ${replyCount}</span>` : ''}
+                ${attCount ? `<span>📎 ${attCount}</span>` : ''}
+                ${notesBadge}
+                ${ratingBadge}
+            </div>
+            <div class="ticket-body">${escapeHtml(tk.message).substring(0, 300)}${tk.message.length > 300 ? '…' : ''}</div>
+            ${attHtml}
+            ${actions}
+        </div>`;
+}
+
+/* ================= CSAT ================= */
+let csatSelected = 0;
+function openCsatModal(ticketId) {
+    const tk = tickets.find(x => x.id === ticketId);
+    if (!tk || tk.rating) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    overlay.innerHTML = `
+        <div class="modal csat-modal" style="max-width:480px; text-align:center;">
+            <div style="font-size:48px; margin-bottom:12px;">🎉</div>
+            <h3>Оцените поддержку</h3>
+            <p class="modal-sub">Обращение ${tk.id} закрыто. Как вам помогли?</p>
+            <div class="stars" id="csatStars">
+                ${[1,2,3,4,5].map(n => `<span class="star" data-rating="${n}" onclick="selectCsatStar(${n})">⭐</span>`).join('')}
+            </div>
+            <div class="form-group" style="text-align:left;">
+                <label>Комментарий (опционально)</label>
+                <textarea class="form-control" id="csatComment" placeholder="Что можно улучшить?" style="min-height:80px;" maxlength="300"></textarea>
+            </div>
+            <div class="modal-actions" style="justify-content:center;">
+                <button type="button" class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">Пропустить</button>
+                <button type="button" class="btn btn-success" onclick="submitCsat('${tk.id}')">Отправить</button>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+}
+function selectCsatStar(n) {
+    csatSelected = n;
+    document.querySelectorAll('#csatStars .star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.rating) <= n));
+}
+function submitCsat(ticketId) {
+    if (!csatSelected) { toast('Выберите оценку', 'warning'); return; }
+    const tk = tickets.find(x => x.id === ticketId);
+    if (!tk) return;
+    tk.rating = csatSelected;
+    tk.ratingComment = document.getElementById('csatComment').value.trim();
+    saveTickets();
+    csats.push({ ticketId, rating: csatSelected, comment: tk.ratingComment, operator: tk.handledBy || 'Support', time: new Date().toISOString() });
+    saveCsats();
+    document.querySelector('.modal-overlay')?.remove();
+    toast('Спасибо за оценку! ⭐', 'success');
+    csatSelected = 0;
+    if (document.getElementById('searchEmail')?.value) searchMyTickets();
+}
+function renderCsatStats() {
+    const container = document.getElementById('csatStats');
+    if (!container) return;
+    const rated = tickets.filter(t => t.rating);
+    if (rated.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">⭐</div><h4>Оценок пока нет</h4><p>Клиенты ставят звёзды после закрытия</p></div>`;
+        return;
+    }
+    const avg = (rated.reduce((s, t) => s + t.rating, 0) / rated.length).toFixed(2);
+    const dist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    rated.forEach(t => dist[t.rating]++);
+    const byOp = {};
+    rated.forEach(t => {
+        const op = t.handledBy || 'Не назначен';
+        if (!byOp[op]) byOp[op] = { sum: 0, count: 0 };
+        byOp[op].sum += t.rating;
+        byOp[op].count++;
+    });
+    container.innerHTML = `
+        <div style="text-align:center; padding:24px; background:var(--bg); border-radius:16px; margin-bottom:20px;">
+            <div style="font-size:56px; font-weight:900; color:var(--gold); line-height:1;">${avg}</div>
+            <div style="font-size:24px; margin:8px 0;">${'⭐'.repeat(Math.round(avg))}</div>
+            <div style="color:var(--text-3); font-size:13px;">Средняя оценка · ${rated.length} отзывов</div>
+        </div>
+        <div style="background:var(--bg-2); border-radius:16px; padding:20px; margin-bottom:20px; border:1px solid var(--border);">
+            <h4 style="margin-bottom:14px; font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-2);">Распределение</h4>
+            ${[5,4,3,2,1].map(n => {
+                const pct = rated.length ? (dist[n] / rated.length * 100).toFixed(0) : 0;
+                return `<div class="csat-stat-row">
+                    <span>${'⭐'.repeat(n)} ${n}</span>
+                    <span style="color:var(--text-3); font-size:12px;">${dist[n]} (${pct}%)</span>
+                </div>`;
+            }).join('')}
+        </div>
+        <div style="background:var(--bg-2); border-radius:16px; padding:20px; border:1px solid var(--border);">
+            <h4 style="margin-bottom:14px; font-size:14px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-2);">🏆 Топ операторов</h4>
+            ${Object.entries(byOp).sort((a, b) => (b[1].sum / b[1].count) - (a[1].sum / a[1].count)).map(([name, data]) => {
+                const a = (data.sum / data.count).toFixed(1);
+                return `<div class="csat-stat-row">
+                    <span>👨‍💻 ${escapeHtml(name)}</span>
+                    <span style="color:var(--gold); font-weight:700;">⭐ ${a} <span style="color:var(--text-3); font-size:11px;">(${data.count})</span></span>
+                </div>`;
+            }).join('')}
+        </div>
+    `;
+}
+
+/* ================= NOTES ================= */
+function addNote(ticketId, text, type) {
+    if (!text.trim()) { toast('Введите текст заметки', 'warning'); return; }
+    if (!notes[ticketId]) notes[ticketId] = [];
+    notes[ticketId].push({
+        text: text.trim(), type: type || 'normal',
+        author: currentUser?.name || 'Support',
+        time: new Date().toISOString()
+    });
+    saveNotes();
+    toast('Заметка добавлена', 'success');
+}
+function deleteNote(ticketId, index) {
+    if (!notes[ticketId]) return;
+    notes[ticketId].splice(index, 1);
+    if (notes[ticketId].length === 0) delete notes[ticketId];
+    saveNotes();
+    toast('Заметка удалена', 'info');
+}
+function renderNotesPanel(ticketId) {
+    const list = notes[ticketId] || [];
+    const typeLabels = { normal: '📝 Заметка', important: '❗ Важно', escalation: '🚨 Эскалация' };
+    return `
+        <div class="notes-panel">
+            <h4>📝 Внутренние заметки (не видны клиенту)</h4>
+            ${list.length === 0 ? '<div style="color:var(--text-3); font-size:12.5px; text-align:center; padding:10px;">Заметок нет</div>' :
+                list.map((n, i) => `
+                    <div class="note-item ${n.type}">
+                        <div style="display:flex; justify-content:space-between; align-items:start; gap:10px;">
+                            <div style="flex:1;">
+                                <div style="font-size:10.5px; color:var(--text-3); margin-bottom:3px; font-weight:700; text-transform:uppercase;">${typeLabels[n.type]}</div>
+                                <div class="note-text">${escapeHtml(n.text)}</div>
+                                <div class="note-meta">
+                                    <span>👤 ${escapeHtml(n.author)}</span>
+                                    <span>🕐 ${formatDate(n.time)}</span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="event.stopPropagation(); deleteNote('${ticketId}', ${i}); openReplyModal('${ticketId}');" style="padding:4px 8px; font-size:11px;">🗑</button>
+                        </div>
+                    </div>
+                `).join('')
+            }
+            <div class="note-form">
+                <input type="text" id="noteInput_${ticketId}" placeholder="Написать заметку..." maxlength="200">
+                <select id="noteType_${ticketId}">
+                    <option value="normal">📝 Обычная</option>
+                    <option value="important">❗ Важная</option>
+                    <option value="escalation">🚨 Эскалация</option>
+                </select>
+                <button type="button" class="btn btn-sm btn-warning" onclick="event.stopPropagation(); const t=document.getElementById('noteInput_${ticketId}').value; const ty=document.getElementById('noteType_${ticketId}').value; addNote('${ticketId}', t, ty); document.querySelector('.modal-overlay')?.remove(); openReplyModal('${ticketId}');">➕ Добавить</button>
+            </div>
+        </div>`;
+}
+
+/* ================= SCHEDULE ================= */
+const DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+function getDefaultSchedule() {
+    return DAYS.map((d, i) => ({ day: d, working: i < 5, from: '10:00', to: '19:00' }));
+}
+function renderScheduleEditor() {
+    if (!currentUser) return;
+    const container = document.getElementById('scheduleEditor');
+    if (!container) return;
+    const sch = schedules[currentUser.login] || getDefaultSchedule();
+    container.innerHTML = `
+        <div style="background:var(--bg-2); border-radius:16px; padding:22px; border:1px solid var(--border);">
+            <div style="font-weight:700; margin-bottom:14px;">Мой график работы</div>
+            <div class="schedule-grid">
+                ${sch.map((s, i) => `
+                    <div class="schedule-day">
+                        <label class="schedule-day-label" style="display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" ${s.working ? 'checked' : ''} onchange="updateScheduleDay(${i}, 'working', this.checked)">
+                            <span>${s.day}</span>
+                        </label>
+                        <div class="schedule-day-row">
+                            <input type="time" value="${s.from}" onchange="updateScheduleDay(${i}, 'from', this.value)">
+                            <span>—</span>
+                            <input type="time" value="${s.to}" onchange="updateScheduleDay(${i}, 'to', this.value)">
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <button type="button" class="btn btn-success" style="margin-top:16px;" onclick="saveMySchedule()">💾 Сохранить график</button>
+        </div>
+    `;
+}
+function updateScheduleDay(i, field, value) {
+    if (!currentUser) return;
+    if (!schedules[currentUser.login]) schedules[currentUser.login] = getDefaultSchedule();
+    schedules[currentUser.login][i][field] = value;
+}
+function saveMySchedule() {
+    saveSchedules();
+    toast('График сохранён', 'success');
+    renderSupportPanel();
+}
+function getScheduleText(login) {
+    const sch = schedules[login];
+    if (!sch) return null;
+    const dayIdx = (new Date().getDay() + 6) % 7;
+    const today = sch[dayIdx];
+    if (!today || !today.working) return { text: 'Сегодня выходной', status: 'not-working' };
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const [fH, fM] = today.from.split(':').map(Number);
+    const [tH, tM] = today.to.split(':').map(Number);
+    const fromMin = fH * 60 + fM, toMin = tH * 60 + tM;
+    if (nowMin < fromMin) return { text: `Работает с ${today.from}`, status: 'not-working' };
+    if (nowMin > toMin) return { text: `Работает до ${today.to} (закончил)`, status: 'not-working' };
+    return { text: `Работает до ${today.to}`, status: 'working' };
+}
+
+/* ================= OPERATORS ================= */
+const STATUS_TTL = 5 * 60 * 1000;
+function getActiveOperators() {
+    const list = [];
+    const ms = operatorStatuses[MAIN_ADMIN.login] || { status: 'offline', updatedAt: 0 };
+    list.push({ login: MAIN_ADMIN.login, name: MAIN_ADMIN.name, role: 'owner', status: isStatusFresh(ms.updatedAt) ? ms.status : 'offline', isOwner: true });
+    specialists.forEach(s => {
+        if (s.status === 'blocked') return;
+        const st = operatorStatuses[s.login] || { status: 'offline', updatedAt: 0 };
+        list.push({ login: s.login, name: s.name, role: 'specialist', status: isStatusFresh(st.updatedAt) ? st.status : 'offline', isOwner: false });
+    });
+    return list;
+}
+function isStatusFresh(ts) { return ts && (Date.now() - ts) < STATUS_TTL; }
+function updateMyPresence() {
+    if (!currentUser) return;
+    const ex = operatorStatuses[currentUser.login] || {};
+    operatorStatuses[currentUser.login] = { status: ex.status || 'online', updatedAt: Date.now() };
+    saveStatuses();
+}
+function startPresenceHeartbeat() {
+    if (presenceInterval) clearInterval(presenceInterval);
+    presenceInterval = setInterval(() => { if (currentUser) updateMyPresence(); }, 60 * 1000);
+}
+
+/* ИСПРАВЛЕНО: setMyStatus работает корректно, без перезагрузки из localStorage */
+function setMyStatus(status) {
+    if (!currentUser) { toast('Сначала войдите в панель', 'warning'); return; }
+    if (!['online', 'break', 'offline'].includes(status)) return;
+    operatorStatuses[currentUser.login] = { status, updatedAt: Date.now() };
+    saveStatuses();
+    updateStatusSwitcher();
+    renderSupportPanel();
+    const labels = { online: '🟢 Онлайн', break: '🟡 Перерыв', offline: '🔴 Оффлайн' };
+    toast(`Статус: ${labels[status] || status}`, 'info', 2000);
+}
+
+function updateStatusSwitcher() {
+    if (!currentUser) {
+        document.querySelectorAll('.my-status-btn').forEach(btn => btn.classList.remove('active'));
+        return;
+    }
+    const st = operatorStatuses[currentUser.login]?.status || 'offline';
+    document.querySelectorAll('.my-status-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.status === st);
+    });
+}
+
+function getStatusMeta(op) {
+    const k = op.status;
+    return {
+        cls: k,
+        emoji: { online: '🟢', break: '🟡', busy: '🟠', offline: '🔴' }[k],
+        text: { online: 'Отвечу за 3-5 мин', break: 'На перерыве', busy: 'Отвечаю другим', offline: 'Оффлайн' }[k],
+        short: { online: 'Онлайн', break: 'Перерыв', busy: 'Занят', offline: 'Оффлайн' }[k],
+        color: { online: 'success', break: 'warning', busy: 'info', offline: 'text-3' }[k]
+    };
+}
+function calculateWaitTime(ops) {
+    const online = ops.filter(o => o.status === 'online' || o.status === 'busy');
+    if (online.length === 0) return { cls: 'slow', icon: '😴', value: 'Все операторы оффлайн', hint: 'Оставьте обращение — ответим позже' };
+    const active = tickets.filter(t => t.status === 'open' || t.status === 'progress').length;
+    const total = 3 + Math.ceil(active / online.length) * 2;
+    if (total <= 5) return { cls: 'fast', icon: '⚡', value: `~${total} мин`, hint: `${online.length} оператор(ов) на связи` };
+    if (total <= 20) return { cls: 'medium', icon: '⏱️', value: `~${total} мин`, hint: `${online.length} оператор(ов) на связи` };
+    return { cls: 'slow', icon: '🐢', value: `~${total} мин`, hint: 'Высокая загрузка' };
+}
+
+/* ИСПРАВЛЕНО: убрана принудительная перезагрузка operatorStatuses из localStorage */
+function renderSupportPanel() {
+    const ops = getActiveOperators();
+    const onlineCount = ops.filter(o => o.status === 'online').length;
+    const busyCount = ops.filter(o => o.status === 'busy').length;
+    const breakCount = ops.filter(o => o.status === 'break').length;
+
+    const subtitle = document.getElementById('supportSubtitle');
+    if (subtitle) {
+        if (onlineCount > 0) subtitle.innerHTML = `<span style="color:var(--success); font-weight:700;">${onlineCount} оператор(ов) на связи</span>`;
+        else subtitle.innerHTML = `<span style="color:var(--text-3);">Все оффлайн</span>`;
+    }
+
+    const statsRow = document.getElementById('supportStatsRow');
+    if (statsRow) {
+        const stats = [];
+        if (onlineCount > 0) stats.push(`<div class="support-stat-mini"><div class="dot"></div>${onlineCount} онлайн</div>`);
+        if (busyCount > 0) stats.push(`<div class="support-stat-mini" style="color:var(--info);">🟠 ${busyCount} занято</div>`);
+        if (breakCount > 0) stats.push(`<div class="support-stat-mini" style="color:var(--warning);">🟡 ${breakCount} перерыв</div>`);
+        statsRow.innerHTML = stats.join('');
+    }
+
+    const wait = calculateWaitTime(ops);
+    const wb = document.getElementById('waitBanner');
+    if (wb) {
+        wb.className = 'wait-time-banner ' + wait.cls;
+        document.getElementById('waitIcon').textContent = wait.icon;
+        document.getElementById('waitValue').textContent = wait.value;
+        document.getElementById('waitHint').textContent = wait.hint;
+    }
+
+    const grid = document.getElementById('operatorsGrid');
+    if (!grid) return;
+    const order = { online: 0, busy: 1, break: 2, offline: 3 };
+    ops.sort((a, b) => (order[a.status] ?? 3) - (order[b.status] ?? 3));
+    grid.innerHTML = ops.map(op => {
+        const meta = getStatusMeta(op);
+        const initials = op.name.split(' ').map(w => w[0]).join('').substring(0, 2);
+        const roleText = op.isOwner ? '👑 Владелец' : '🛠️ Специалист';
+        const schInfo = getScheduleText(op.login);
+        const schHtml = schInfo ? `<div class="operator-schedule ${schInfo.status}">📅 ${schInfo.text}</div>` : '';
+        return `<div class="operator-card ${meta.cls}">
+            <div class="operator-avatar ${op.isOwner ? 'owner' : 'specialist'}">${initials}<span class="operator-status-dot ${meta.cls}"></span></div>
+            <div class="operator-info">
+                <div class="operator-name">${escapeHtml(op.name)}</div>
+                <div class="operator-role ${op.isOwner ? 'owner' : ''}">${roleText}</div>
+                <div class="operator-status-text ${meta.cls}">${meta.emoji} ${meta.text}</div>
+                ${schHtml}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ================= ADMIN LOGIN + IDLE ================= */
+function adminLogin() {
+    const u = document.getElementById('adminUser').value.trim();
+    const p = document.getElementById('adminPass').value;
+    if (u === MAIN_ADMIN.login && p === MAIN_ADMIN.password) {
+        currentUser = { login: MAIN_ADMIN.login, name: MAIN_ADMIN.name, role: 'owner' };
+        enterAdminPanel();
+        return;
+    }
+    const sp = specialists.find(s => s.login === u && s.password === p);
+    if (sp) {
+        if (sp.status === 'blocked') { showAlert('loginAlert', 'Доступ заблокирован', 'error'); return; }
+        currentUser = { login: sp.login, name: sp.name, role: 'specialist' };
+        enterAdminPanel();
+        return;
+    }
+    showAlert('loginAlert', 'Неверный логин или пароль', 'error');
+}
+
+/* ИСПРАВЛЕНО: корректный порядок операций, безопасные проверки */
+function enterAdminPanel() {
+    document.getElementById('adminLogin').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    document.getElementById('operatorName').textContent = currentUser.name;
+
+    const tabSp = document.getElementById('tabSpecialists');
+    if (currentUser.role === 'owner') tabSp.classList.remove('hidden');
+    else { tabSp.classList.add('hidden'); if (currentAdminTab === 'specialists') switchAdminTab('tickets'); }
+
+    const rb = document.getElementById('roleBadge');
+    if (currentUser.role === 'owner') rb.innerHTML = '<span class="spec-badge active" style="background:linear-gradient(135deg,#ffd700,#ff9f1c); color:#1a1a2e;">👑 Владелец</span>';
+    else rb.innerHTML = '<span class="spec-badge active">🛠️ Специалист</span>';
+
+    // загружаем актуальные статусы из localStorage
+    try { operatorStatuses = JSON.parse(localStorage.getItem(STATUS_STORAGE_KEY) || '{}'); } catch { operatorStatuses = {}; }
+
+    const ex = operatorStatuses[currentUser.login];
+    if (!ex || !isStatusFresh(ex.updatedAt)) {
+        operatorStatuses[currentUser.login] = { status: 'online', updatedAt: Date.now() };
+    } else {
+        operatorStatuses[currentUser.login].updatedAt = Date.now();
+    }
+    saveStatuses();
+
+    // Сначала DOM, потом подсветка
+    updateStatusSwitcher();
+    startPresenceHeartbeat();
+    startIdleTimer();
+    loadAdminData();
+    updateNavBadge();
+    toast(`Добро пожаловать, ${currentUser.name}`, 'success');
+}
+
+/* ИСПРАВЛЕНО: корректный выход, снятие таймеров, безопасные проверки */
+function adminLogout(silent) {
+    if (!currentUser) {
+        document.getElementById('adminLogin')?.classList.remove('hidden');
+        document.getElementById('adminPanel')?.classList.add('hidden');
+        return;
+    }
+
+    operatorStatuses[currentUser.login] = { status: 'offline', updatedAt: Date.now() };
+    saveStatuses();
+
+    if (presenceInterval) { clearInterval(presenceInterval); presenceInterval = null; }
+    if (idleCheckInterval) { clearInterval(idleCheckInterval); idleCheckInterval = null; }
+
+    document.querySelectorAll('.idle-warning').forEach(e => e.remove());
+    idleWarningShown = false;
+
+    currentUser = null;
+    document.getElementById('adminLogin').classList.remove('hidden');
+    document.getElementById('adminPanel').classList.add('hidden');
+    const u = document.getElementById('adminUser'); if (u) u.value = '';
+    const p = document.getElementById('adminPass'); if (p) p.value = '';
+
+    updateStatusSwitcher();
+    renderSupportPanel();
+    updateNavBadge();
+    if (!silent) toast('Вы вышли', 'info');
+}
+
+/* ИСПРАВЛЕНО: слушатели idle навешиваются один раз */
+function startIdleTimer() {
+    lastActivity = Date.now();
+    idleWarningShown = false;
+    if (idleCheckInterval) clearInterval(idleCheckInterval);
+
+    if (!idleListenersAttached) {
+        ['mousemove', 'keydown', 'click', 'scroll'].forEach(evt =>
+            document.addEventListener(evt, resetIdle, { passive: true })
+        );
+        idleListenersAttached = true;
+    }
+
+    idleCheckInterval = setInterval(checkIdle, 30 * 1000);
+}
+function resetIdle() {
+    if (!currentUser) return;
+    lastActivity = Date.now();
+    if (idleWarningShown) {
+        idleWarningShown = false;
+        document.querySelectorAll('.idle-warning').forEach(e => e.remove());
+    }
+}
+function checkIdle() {
+    if (!currentUser) return;
+    const idle = Date.now() - lastActivity;
+    const remaining = IDLE_TIMEOUT_MS - idle;
+    const t = document.getElementById('idleTimer');
+    if (t) {
+        const m = Math.floor(Math.max(0, remaining) / 60000);
+        const s = Math.floor(Math.max(0, remaining) / 1000) % 60;
+        t.textContent = `⏱ ${m}:${String(s).padStart(2, '0')}`;
+    }
+    if (idle >= IDLE_TIMEOUT_MS) {
+        adminLogout(true);
+        alert('🔒 Сессия завершена (30 мин).');
+        navigate('admin');
+        return;
+    }
+    if (idle >= IDLE_WARNING_MS && !idleWarningShown) {
+        idleWarningShown = true;
+        const w = document.createElement('div');
+        w.className = 'idle-warning';
+        w.innerHTML = '⚠️ Автовыход через 1 минуту...';
+        document.body.appendChild(w);
+        setTimeout(() => w.remove(), 60000);
+    }
+}
+
+/* ================= ADMIN DATA ================= */
+function loadAdminData() {
+    loadAll();
+    updateStats();
+    renderAdminTickets();
+    renderSpecialists();
+    renderServerInfo();
+    renderMaintenanceList();
+    renderReferralsList();
+    renderScheduleEditor();
+    renderCsatStats();
+    updateStatusSwitcher();
+    updateNavBadge();
+}
+function switchAdminTab(tab) {
+    if (tab === 'specialists' && currentUser?.role !== 'owner') { toast('Доступ запрещён', 'error'); return; }
+    currentAdminTab = tab;
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    ['tickets','specialists','schedule','csat','maintenance','referrals','servers'].forEach(x => {
+        document.getElementById('tab-' + x)?.classList.toggle('hidden', x !== tab);
+    });
+    if (tab === 'servers') renderServerInfo();
+    if (tab === 'maintenance') renderMaintenanceList();
+    if (tab === 'referrals') renderReferralsList();
+    if (tab === 'schedule') renderScheduleEditor();
+    if (tab === 'csat') renderCsatStats();
+}
+function updateStats() {
+    document.getElementById('statTotal').textContent = tickets.length;
+    document.getElementById('statOpen').textContent = tickets.filter(t => t.status === 'open').length;
+    document.getElementById('statProgress').textContent = tickets.filter(t => t.status === 'progress').length;
+    document.getElementById('statClosed').textContent = tickets.filter(t => t.status === 'closed').length;
+    document.getElementById('statUrgent').textContent = tickets.filter(t => t.priority === 'urgent' && t.status !== 'closed' && t.status !== 'rejected').length;
+    updateNavBadge();
+}
+function setFilter(filter, el) {
+    currentFilter = filter;
+    document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+    if (el) el.classList.add('active');
+    renderAdminTickets();
+}
+function renderAdminTickets() {
+    const q = document.getElementById('adminSearch').value.toLowerCase().trim();
+    const sort = document.getElementById('adminSort').value;
+    let list = tickets.filter(t => {
+        if (currentFilter === 'urgent') { if (t.priority !== 'urgent' || t.status === 'closed' || t.status === 'rejected') return false; }
+        else if (currentFilter !== 'all' && t.status !== currentFilter) return false;
+        if (q) {
+            const s = (t.subject + t.email + t.name + t.id + t.message + t.category).toLowerCase();
+            if (!s.includes(q)) return false;
+        }
+        return true;
+    });
+    if (sort === 'new') list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    if (sort === 'old') list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    if (sort === 'priority') { const o = { urgent: 0, high: 1, normal: 2, low: 3 }; list.sort((a, b) => (o[a.priority] ?? 2) - (o[b.priority] ?? 2)); }
+    const c = document.getElementById('adminTicketsList');
+    if (tickets.length === 0) { c.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h4>Обращений нет</h4></div>`; return; }
+    if (list.length === 0) { c.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><h4>Ничего не найдено</h4></div>`; return; }
+    c.innerHTML = list.map(tk => renderTicketCard(tk, true)).join('');
+}
+function setStatus(id, status) {
+    const tk = tickets.find(x => x.id === id);
+    if (!tk) return;
+    const oldStatus = tk.status;
+    tk.status = status;
+    tk.updatedAt = new Date().toISOString();
+    if (!tk.handledBy && currentUser) tk.handledBy = currentUser.name;
+    if (status === 'progress' && oldStatus !== 'progress' && currentUser) {
+        tk.replies = tk.replies || [];
+        const hasGreeting = tk.replies.some(r => r.autoGreeting);
+        if (!hasGreeting) {
+            tk.replies.push({
+                from: 'support',
+                text: `Здравствуйте, ${tk.name}! Меня зовут ${currentUser.name}, я помогу вам с вашим вопросом. Уже изучаю детали — отвечу в течение 5 минут.`,
+                time: new Date().toISOString(),
+                author: currentUser.name,
+                autoGreeting: true
+            });
+        }
+    }
+    saveTickets();
+    renderAdminTickets();
+    updateStats();
+    toast('OK', 'success', 1500);
+}
+function deleteTicket(id) {
+    if (!confirm(`Удалить ${id}?`)) return;
+    tickets = tickets.filter(x => x.id !== id);
+    delete notes[id];
+    saveNotes();
+    saveTickets();
+    renderAdminTickets();
+    updateStats();
+    toast('Удалено', 'info');
+}
+function clearAllTickets() {
+    if (tickets.length === 0) return;
+    if (!confirm(`Удалить ВСЕ ${tickets.length}?`)) return;
+    tickets = [];
+    notes = {};
+    saveNotes();
+    saveTickets();
+    renderAdminTickets();
+    updateStats();
+}
+
+/* ================= CHAT WITH TYPING ================= */
+function openReplyModal(id) {
+    const tk = tickets.find(x => x.id === id);
+    if (!tk) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+
+    const repliesHtml = (tk.replies || []).map(r => renderMessage(r, tk)).join('') || '—';
+    let attHtml = '';
+    if ((tk.attachments || []).length) {
+        attHtml = `<div style="margin-bottom:14px;"><div style="font-size:12px; color:var(--text-3); margin-bottom:6px;">📎 Вложения:</div><div class="ticket-attachments">${tk.attachments.map(a => `<img class="ticket-attachment-thumb" src="${a.data}" onclick="viewImage('${a.data}')">`).join('')}</div></div>`;
+    }
+
+    overlay.innerHTML = `
+        <div class="modal">
+            <h3>💬 Ответ клиенту</h3>
+            <div class="modal-sub">🎫 ${tk.id} · ${escapeHtml(tk.subject)}</div>
+            <div class="ticket-meta" style="margin-bottom:14px;">
+                <span>👤 ${escapeHtml(tk.name)}</span>
+                <span>📧 ${escapeHtml(tk.email)}</span>
+            </div>
+            ${renderNotesPanel(tk.id)}
+            ${attHtml}
+            <div class="chat-box" id="chatBoxAdmin">
+                ${renderMessage({ from: 'user', text: tk.message, time: tk.createdAt }, tk, true)}
+                ${repliesHtml}
+                <div data-typing-ticket="${tk.id}" id="typingIndicator_${tk.id}"></div>
+            </div>
+            <div class="reply-toolbar">
+                <button type="button" onclick="toggleEmojiPicker()">😀 Эмодзи</button>
+                <button type="button" onclick="insertQuickPhrase('Здравствуйте! Спасибо за обращение. ')">👋 Привет</button>
+                <button type="button" onclick="insertQuickPhrase('Проверяю вашу проблему, ответ через 2 минуты. ')">⏳ Проверяю</button>
+                <button type="button" onclick="insertQuickPhrase('Проблема решена. Закрываю обращение. ')">✅ Закрыть</button>
+                <button type="button" onclick="insertQuickPhrase('Попробуйте переустановить сборку Fresnas Studio 2.0. ')">📦 Сборка</button>
+            </div>
+            <div class="emoji-picker" id="emojiPicker">
+                ${'😀 😃 😄 😁 😊 🙂 😉 😍 🥰 😎 🤔 🤨 😐 😴 😢 😭 😡 🤯 🥳 👍 👎 👏 🙏 💪 🔥 ⭐ ❤️ 💔 🎉 🚀'.split(' ').map(e => `<button type="button" onclick="insertEmoji('${e}')">${e}</button>`).join('')}
+            </div>
+            <div class="form-group">
+                <label>Ваш ответ</label>
+                <textarea class="form-control" id="adminReplyText" style="min-height:110px;" maxlength="1500" oninput="onAdminTyping('${tk.id}')"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="exportChatTXT('${tk.id}')">📥 TXT</button>
+                <button type="button" class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">Отмена</button>
+                <button type="button" class="btn btn-success" onclick="sendAdminReply('${tk.id}')">📤 Отправить</button>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+    const cb = overlay.querySelector('#chatBoxAdmin');
+    if (cb) cb.scrollTop = cb.scrollHeight;
+    overlay.querySelector('#adminReplyText')?.focus();
+    startTypingWatcher();
+}
+function toggleEmojiPicker() { document.getElementById('emojiPicker')?.classList.toggle('show'); }
+function insertEmoji(e) {
+    const ta = document.getElementById('adminReplyText');
+    if (!ta) return;
+    ta.value += e;
+    ta.focus();
+}
+function insertQuickPhrase(text) {
+    const ta = document.getElementById('adminReplyText');
+    if (!ta) return;
+    ta.value += text;
+    ta.focus();
+}
+function onAdminTyping(ticketId) {
+    setTyping('support', ticketId);
+    if (typingTimer) clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => setTyping(null, ticketId), TYPING_TIMEOUT_MS);
+}
+function sendAdminReply(id) {
+    const tk = tickets.find(x => x.id === id);
+    if (!tk) return;
+    const text = document.getElementById('adminReplyText').value.trim();
+    if (!text) { toast('Введите текст', 'warning'); return; }
+    tk.replies = tk.replies || [];
+    tk.replies.push({ from: 'support', text, time: new Date().toISOString(), author: currentUser?.name || 'Support' });
+    if (tk.status === 'open') tk.status = 'progress';
+    if (!tk.handledBy && currentUser) tk.handledBy = currentUser.name;
+    tk.updatedAt = new Date().toISOString();
+    setTyping(null, id);
+    saveTickets();
+    document.querySelector('.modal-overlay')?.remove();
+    renderAdminTickets();
+    updateStats();
+    toast('Ответ отправлен', 'success');
+}
+
+/* ================= USER TICKET VIEW ================= */
+function openTicketView(id) {
+    const tk = tickets.find(x => x.id === id);
+    if (!tk) return;
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    const repliesHtml = (tk.replies || []).map(r => renderMessage(r, tk)).join('') || '<div style="text-align:center; color:var(--text-3); padding:20px;">Ответов пока нет</div>';
+    const canReply = tk.status !== 'closed' && tk.status !== 'rejected';
+    const statusNames = { open: 'Открыто', progress: 'В работе', closed: 'Закрыто', rejected: 'Отклонено' };
+    let attHtml = '';
+    if ((tk.attachments || []).length) attHtml = `<div style="margin-bottom:14px;"><div style="font-size:12px; color:var(--text-3); margin-bottom:6px;">📎 Ваши вложения:</div><div class="ticket-attachments">${tk.attachments.map(a => `<img class="ticket-attachment-thumb" src="${a.data}" onclick="viewImage('${a.data}')">`).join('')}</div></div>`;
+
+    overlay.innerHTML = `
+        <div class="modal">
+            <h3>${escapeHtml(tk.subject)}</h3>
+            <div class="modal-sub">🎫 ${tk.id} · ${statusNames[tk.status]}</div>
+            ${attHtml}
+            <div class="chat-box" id="chatBoxUser">
+                ${renderMessage({ from: 'user', text: tk.message, time: tk.createdAt }, tk, true)}
+                ${repliesHtml}
+                <div data-typing-ticket="${tk.id}" id="typingIndicator_${tk.id}"></div>
+            </div>
+            ${canReply ? `
+                <div class="form-group" style="margin-bottom:12px;">
+                    <textarea class="form-control" id="userReplyText" placeholder="Написать сообщение..." style="min-height:80px;" maxlength="1000" oninput="onUserTyping('${tk.id}')"></textarea>
+                </div>
+            ` : ''}
+            ${!canReply && !tk.rating ? `<div class="alert alert-warning show">Обращение закрыто. Оцените поддержку ⭐</div>` : ''}
+            <div class="modal-actions">
+                ${tk.status === 'closed' && !tk.rating ? `<button type="button" class="btn btn-warning" onclick="this.closest('.modal-overlay').remove(); openCsatModal('${tk.id}')">⭐ Оценить</button>` : ''}
+                <button type="button" class="btn btn-outline" onclick="exportChatTXT('${tk.id}')">📥 TXT</button>
+                <button type="button" class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">Закрыть</button>
+                ${canReply ? `<button type="button" class="btn" onclick="sendUserReply('${tk.id}')">📤 Отправить</button>` : ''}
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+    const cb = overlay.querySelector('#chatBoxUser');
+    if (cb) cb.scrollTop = cb.scrollHeight;
+    startTypingWatcher();
+}
+function onUserTyping(ticketId) {
+    setTyping('user', ticketId);
+    if (typingTimer) clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => setTyping(null, ticketId), TYPING_TIMEOUT_MS);
+}
+function renderMessage(r, tk, isOriginal = false) {
+    const senderLabel = r.from === 'support' ? '🛡️ Поддержка' : '👤 ' + (isOriginal ? escapeHtml(tk.name) : 'Вы');
+    const cls = r.from === 'support' ? 'support' : 'user';
+    return `<div class="message ${cls}">
+        <div class="message-sender">${senderLabel}${r.author ? ` · ${escapeHtml(r.author)}` : ''}${r.autoGreeting ? ' 🤖' : ''}</div>
+        ${escapeHtml(r.text)}
+        <div class="message-time">${formatDate(r.time)}</div>
+    </div>`;
+}
+function sendUserReply(id) {
+    const tk = tickets.find(x => x.id === id);
+    if (!tk) return;
+    const text = document.getElementById('userReplyText').value.trim();
+    if (!text) { toast('Введите текст', 'warning'); return; }
+    tk.replies = tk.replies || [];
+    tk.replies.push({ from: 'user', text, time: new Date().toISOString() });
+    if (tk.status === 'closed' || tk.status === 'rejected') tk.status = 'open';
+    tk.updatedAt = new Date().toISOString();
+    setTyping(null, id);
+    saveTickets();
+    document.querySelector('.modal-overlay')?.remove();
+    openTicketView(id);
+    if (document.getElementById('searchEmail')?.value) searchMyTickets();
+    toast('Отправлено', 'success');
+}
+
+/* ================= EXPORT CHAT ================= */
+function exportChatTXT(id) {
+    const tk = tickets.find(x => x.id === id);
+    if (!tk) return;
+    let txt = `═══════════════════════════════\n   FRESNAS STUDIO 2.0 — ТИКЕТ ${tk.id}\n═══════════════════════════════\n\n`;
+    txt += `Тема: ${tk.subject}\nКлиент: ${tk.name}\nEmail: ${tk.email}\nКатегория: ${tk.category}\nСтатус: ${tk.status}\nСоздан: ${formatDateFull(tk.createdAt)}\n`;
+    if (tk.handledBy) txt += `Обрабатывает: ${tk.handledBy}\n`;
+    if (tk.rating) txt += `Оценка клиента: ${'⭐'.repeat(tk.rating)} (${tk.rating}/5)\n`;
+    txt += `\n─────────── ПЕРЕПИСКА ───────────\n\n`;
+    txt += `[${formatDateFull(tk.createdAt)}] ${tk.name}:\n${tk.message}\n\n`;
+    (tk.replies || []).forEach(r => {
+        const who = r.from === 'support' ? `Поддержка${r.author ? ' (' + r.author + ')' : ''}` : tk.name;
+        txt += `[${formatDateFull(r.time)}] ${who}:\n${r.text}\n\n`;
+    });
+    txt += `─────────────────────────────\nЭкспортировано: ${formatDateFull(new Date().toISOString())}\n© 2026 Fresnas Studio 2.0\n═════════════════════════════\n`;
+    downloadFile(`ticket_${tk.id}_${Date.now()}.txt`, txt, 'text/plain;charset=utf-8');
+    toast('TXT сохранён', 'success');
+}
+
+/* ================= REFERRAL ================= */
+function generatePromo() {
+    const email = document.getElementById('referralEmail').value.trim().toLowerCase();
+    if (!email) { toast('Введите email', 'warning'); return; }
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) { toast('Некорректный email', 'error'); return; }
+    let ex = referrals.find(r => r.email === email);
+    if (!ex) {
+        const code = 'FRN' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        ex = { code, email, createdAt: new Date().toISOString(), uses: 0, discount: 15 };
+        referrals.push(ex);
+        saveReferrals();
+        toast('Промокод создан!', 'success');
+    } else toast('Уже есть промокод', 'info');
+    document.getElementById('promoResult').innerHTML = `
+        <div class="promo-box">
+            <div class="promo-label">Ваш промокод</div>
+            <div class="promo-code">${ex.code}</div>
+            <button type="button" class="btn btn-success" onclick="copyPromo('${ex.code}')">📋 Скопировать</button>
+            <div class="promo-hint">Поделитесь с другом — вы оба получите 15%</div>
+        </div>`;
+    renderMyPromos();
+}
+function copyPromo(code) { navigator.clipboard.writeText(code).then(() => toast(`Скопирован: ${code}`, 'success')).catch(() => {}); }
+function renderMyPromos() {
+    const c = document.getElementById('myPromosList');
+    if (!c) return;
+    const email = document.getElementById('referralEmail')?.value.trim().toLowerCase();
+    if (!email) { c.innerHTML = ''; return; }
+    const my = referrals.filter(r => r.email === email);
+    if (my.length === 0) { c.innerHTML = ''; return; }
+    c.innerHTML = `<div style="font-size:13px; color:var(--text-3); margin-bottom:12px;">Ваши промокоды:</div>` + my.map(r => `
+        <div class="spec-card" style="border-left-color:var(--pink);">
+            <div class="spec-info">
+                <div class="spec-name">🎫 ${r.code} <span class="spec-badge active" style="background:rgba(255,107,203,0.15); color:var(--pink);">−${r.discount}%</span></div>
+                <div class="spec-meta"><span>📅 ${formatDate(r.createdAt)}</span><span>👥 ${r.uses}</span></div>
+            </div>
+            <div class="spec-actions"><button type="button" class="btn btn-sm" onclick="copyPromo('${r.code}')">📋</button></div>
+        </div>`).join('');
+}
+
+/* ================= MAINTENANCE ================= */
+function renderMaintenanceBanner() {
+    const c = document.getElementById('maintenanceBannerContainer');
+    if (!c) return;
+    const now = Date.now();
+    const up = maintenances.filter(m => new Date(m.endAt).getTime() > now).sort((a, b) => new Date(a.startAt) - new Date(b.startAt)).slice(0, 2);
+    if (up.length === 0) { c.innerHTML = ''; return; }
+    c.innerHTML = up.map(m => `<div class="maintenance-banner"><div class="icon">📅</div><div class="content"><div class="title">Плановые работы</div><div class="desc">${escapeHtml(m.title)}${m.description ? ' — ' + escapeHtml(m.description) : ''}</div></div><div class="time">${formatMaintRange(m)}</div></div>`).join('');
+}
+function formatMaintRange(m) {
+    const s = new Date(m.startAt), e = new Date(m.endAt);
+    return `${s.toLocaleString('ru-RU', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} → ${e.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+}
+function openAddMaintenanceModal() {
+    if (!currentUser || currentUser.role !== 'owner') { toast('Только FRESNAS', 'error'); return; }
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    const tomorrow = new Date(Date.now() + 24 * 3600 * 1000);
+    const sv = tomorrow.toISOString().slice(0, 16);
+    const ev = new Date(tomorrow.getTime() + 2 * 3600 * 1000).toISOString().slice(0, 16);
+    overlay.innerHTML = `
+        <div class="modal" style="max-width:520px;">
+            <h3>📅 Запланировать работы</h3>
+            <div id="maintFormAlert" class="alert"></div>
+            <div class="form-group"><label>Название *</label><input class="form-control" id="maintTitle" placeholder="Обновление сборки Fresnas 2.1" maxlength="80"></div>
+            <div class="form-group"><label>Описание</label><input class="form-control" id="maintDesc" maxlength="120"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Начало *</label><input type="datetime-local" class="form-control" id="maintStart" value="${sv}"></div>
+                <div class="form-group"><label>Конец *</label><input type="datetime-local" class="form-control" id="maintEnd" value="${ev}"></div>
+            </div>
+            <div class="modal-actions"><button type="button" class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">Отмена</button><button type="button" class="btn btn-success" onclick="addMaintenance()">✓ Создать</button></div>
+        </div>`;
+    document.body.appendChild(overlay);
+}
+function addMaintenance() {
+    const t = document.getElementById('maintTitle').value.trim();
+    const d = document.getElementById('maintDesc').value.trim();
+    const s = document.getElementById('maintStart').value;
+    const e = document.getElementById('maintEnd').value;
+    if (!t || !s || !e) { showAlert('maintFormAlert', 'Заполните поля', 'error'); return; }
+    if (new Date(e) <= new Date(s)) { showAlert('maintFormAlert', 'Конец позже начала', 'error'); return; }
+    maintenances.push({ id: 'MNT-' + Date.now().toString(36).toUpperCase(), title: t, description: d, startAt: new Date(s).toISOString(), endAt: new Date(e).toISOString(), createdBy: currentUser.name, createdAt: new Date().toISOString() });
+    saveMaintenances();
+    document.querySelector('.modal-overlay')?.remove();
+    renderMaintenanceList();
+    renderMaintenanceBanner();
+    toast('Работы запланированы', 'success');
+}
+function renderMaintenanceList() {
+    const c = document.getElementById('maintenanceList');
+    if (!c) return;
+    if (maintenances.length === 0) { c.innerHTML = `<div class="empty-state"><div class="icon">📅</div><h4>Нет запланированных работ</h4></div>`; return; }
+    const now = Date.now();
+    c.innerHTML = [...maintenances].sort((a, b) => new Date(b.startAt) - new Date(a.startAt)).map(m => {
+        const past = new Date(m.endAt).getTime() < now;
+        return `<div class="maintenance-item ${past ? 'past' : ''}">
+            <div class="maintenance-info">
+                <div class="maintenance-title">${escapeHtml(m.title)}</div>
+                <div class="maintenance-time">${formatMaintRange(m)}</div>
+                ${m.description ? `<div class="maintenance-desc">${escapeHtml(m.description)}</div>` : ''}
+            </div>
+            <div class="maintenance-actions"><button type="button" class="btn btn-sm btn-danger" onclick="deleteMaintenance('${m.id}')">🗑</button></div>
+        </div>`;
+    }).join('');
+}
+function deleteMaintenance(id) {
+    if (!confirm('Удалить?')) return;
+    maintenances = maintenances.filter(m => m.id !== id);
+    saveMaintenances();
+    renderMaintenanceList();
+    renderMaintenanceBanner();
+}
+function renderReferralsList() {
+    const c = document.getElementById('referralsList');
+    if (!c) return;
+    if (referrals.length === 0) { c.innerHTML = `<div class="empty-state"><div class="icon">🎁</div><h4>Промокодов нет</h4></div>`; return; }
+    c.innerHTML = `<div style="font-size:13px; color:var(--text-3); margin-bottom:14px;">Всего: <strong>${referrals.length}</strong></div>` + referrals.map(r => `
+        <div class="spec-card" style="border-left-color:var(--pink);">
+            <div class="spec-info">
+                <div class="spec-name">🎫 ${r.code} <span class="spec-badge active" style="background:rgba(255,107,203,0.15); color:var(--pink);">−${r.discount}%</span></div>
+                <div class="spec-login">📧 ${escapeHtml(r.email)}</div>
+                <div class="spec-meta"><span>📅 ${formatDate(r.createdAt)}</span><span>👥 ${r.uses}</span></div>
+            </div>
+            <div class="spec-actions"><button type="button" class="btn btn-sm btn-danger" onclick="deleteReferral('${r.code}')">🗑</button></div>
+        </div>`).join('');
+}
+function deleteReferral(code) {
+    if (!confirm(`Удалить ${code}?`)) return;
+    referrals = referrals.filter(r => r.code !== code);
+    saveReferrals();
+    renderReferralsList();
+}
+
+/* ================= SPECIALISTS ================= */
+function renderSpecialists() {
+    if (!currentUser || currentUser.role !== 'owner') return;
+    const c = document.getElementById('specList');
+    if (specialists.length === 0) { c.innerHTML = `<div class="empty-state"><div class="icon">👥</div><h4>Нет специалистов</h4></div>`; return; }
+    c.innerHTML = specialists.map((s, i) => `
+        <div class="spec-card ${s.status === 'blocked' ? 'blocked' : ''}">
+            <div class="spec-info">
+                <div class="spec-name">${escapeHtml(s.name)} <span class="spec-badge ${s.status === 'active' ? 'active' : 'blocked'}">${s.status === 'active' ? '✓' : '✕'}</span></div>
+                <div class="spec-login">🔑 ${escapeHtml(s.login)}</div>
+                <div class="spec-meta"><span>📅 ${formatDate(s.createdAt)}</span></div>
+            </div>
+            <div class="spec-actions">
+                <button type="button" class="btn btn-sm btn-outline" onclick="toggleSpecPassword(${i})">👁</button>
+                <button type="button" class="btn btn-sm ${s.status === 'active' ? 'btn-warning' : 'btn-success'}" onclick="toggleSpecStatus(${i})">${s.status === 'active' ? '🚫' : '✓'}</button>
+                <button type="button" class="btn btn-sm btn-outline" onclick="changeSpecPassword(${i})">🔐</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="deleteSpec(${i})">🗑</button>
+            </div>
+        </div>`).join('');
+}
+function openAddSpecModal() {
+    if (!currentUser || currentUser.role !== 'owner') { toast('Доступ запрещён', 'error'); return; }
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+    overlay.innerHTML = `
+        <div class="modal" style="max-width:520px;">
+            <h3>➕ Новый специалист</h3>
+            <div id="specFormAlert" class="alert"></div>
+            <div class="form-group"><label>Имя</label><input class="form-control" id="newSpecName" maxlength="60"></div>
+            <div class="form-group"><label>Логин</label><input class="form-control" id="newSpecLogin" maxlength="30"></div>
+            <div class="form-group"><label>Пароль</label>
+                <div style="display:flex; gap:8px;"><input class="form-control" id="newSpecPassword" maxlength="60"><button type="button" class="btn btn-outline btn-sm" onclick="generateSpecPassword()" type="button">🎲</button></div>
+            </div>
+            <div class="modal-actions"><button type="button" class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">Отмена</button><button type="button" class="btn btn-success" onclick="addSpecialist()">✓ Создать</button></div>
+        </div>`;
+    document.body.appendChild(overlay);
+}
+function generateSpecPassword() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%';
+    let p = ''; for (let i = 0; i < 12; i++) p += chars[Math.floor(Math.random() * chars.length)];
+    document.getElementById('newSpecPassword').value = p;
+}
+function addSpecialist() {
+    const n = document.getElementById('newSpecName').value.trim();
+    const l = document.getElementById('newSpecLogin').value.trim();
+    const p = document.getElementById('newSpecPassword').value;
+    if (!n || !l || !p) { showAlert('specFormAlert', 'Все поля обязательны', 'error'); return; }
+    if (!/^[a-zA-Z0-9_-]+$/.test(l)) { showAlert('specFormAlert', 'Логин: латиница, цифры', 'error'); return; }
+    if (p.length < 6) { showAlert('specFormAlert', 'Пароль мин. 6', 'error'); return; }
+    if (l === MAIN_ADMIN.login) { showAlert('specFormAlert', 'Зарезервирован', 'error'); return; }
+    if (specialists.some(s => s.login.toLowerCase() === l.toLowerCase())) { showAlert('specFormAlert', 'Логин занят', 'error'); return; }
+    specialists.push({ login: l, password: p, name: n, status: 'active', createdAt: new Date().toISOString(), createdBy: currentUser.name });
+    saveSpecs();
+    document.querySelector('.modal-overlay')?.remove();
+    renderSpecialists();
+    renderSupportPanel();
+    toast('Специалист создан', 'success');
+    setTimeout(() => alert(`✅\n\nName: ${n}\nLogin: ${l}\nPassword: ${p}`), 200);
+}
+function toggleSpecPassword(i) { const s = specialists[i]; alert(`Login: ${s.login}\nPassword: ${s.password}`); }
+function toggleSpecStatus(i) { const s = specialists[i]; s.status = s.status === 'active' ? 'blocked' : 'active'; saveSpecs(); renderSpecialists(); renderSupportPanel(); }
+function changeSpecPassword(i) {
+    const s = specialists[i];
+    const np = prompt(`Новый пароль для ${s.login}:`, '');
+    if (!np || np.length < 6) return;
+    s.password = np; saveSpecs(); renderSpecialists(); toast('Пароль изменён', 'success');
+}
+function deleteSpec(i) {
+    const s = specialists[i];
+    if (!confirm(`Удалить ${s.login}?`)) return;
+    delete operatorStatuses[s.login]; saveStatuses();
+    specialists.splice(i, 1); saveSpecs();
+    renderSpecialists(); renderSupportPanel();
+}
+
+/* ================= SERVER ================= */
+function renderServerInfo() {
+    const s = SERVERS[0];
+    const p = document.getElementById('byPing'), l = document.getElementById('byLoad');
+    if (p) p.textContent = serverPings[s.id] + ' ms';
+    if (l) { const v = Math.round(serverLoads[s.id]); l.textContent = v + '%'; l.style.color = v < 40 ? 'var(--success)' : v < 70 ? 'var(--warning)' : 'var(--danger)'; }
+}
+
+/* ================= EXPORT ================= */
+function exportTickets() {
+    if (tickets.length === 0) return;
+    downloadFile('tickets_' + Date.now() + '.json', JSON.stringify(tickets, null, 2), 'application/json');
+    toast('JSON', 'success');
+}
+function exportCSV() {
+    if (tickets.length === 0) return;
+    const h = ['ID','Date','Name','Email','Category','Subject','Status','Priority','Replies','Attachments','HandledBy','Rating','Message'];
+    const r = tickets.map(t => [t.id, new Date(t.createdAt).toLocaleString('ru-RU'), t.name, t.email, t.category, t.subject, t.status, t.priority||'normal', (t.replies||[]).length, (t.attachments||[]).length, t.handledBy||'', t.rating||'', t.message.replace(/"/g,'""').replace(/\n/g,' ')]);
+    const csv = [h, ...r].map(row => row.map(c => `"${c}"`).join(',')).join('\n');
+    downloadFile('tickets_' + Date.now() + '.csv', '\ufeff' + csv, 'text/csv');
+    toast('CSV', 'success');
+}
+function downloadFile(fn, c, m) {
+    const b = new Blob([c], { type: m }); const u = URL.createObjectURL(b);
+    const a = document.createElement('a'); a.href = u; a.download = fn;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(u);
+}
+
+/* ================= FAQ ================= */
+const FAQ_DATA = [
+    { q: '🇧🇾 Где находится сервер?', a: 'Наш основной сервер в Минске, Беларусь (Fresnas BY #1). Оптимальный пинг для СНГ.' },
+    { q: '🔌 Как подключиться к серверу?', a: 'Скачайте лаунчер Fresnas Studio 2.0, выберите сервер «Fresnas BY #1» и нажмите «Подключить».' },
+    { q: '🧩 Какие платформы поддерживаются?', a: 'CRMP (Crimson Multiplayer), SAMP (San Andreas Multiplayer) и MTA (Multi Theft Auto).' },
+    { q: '📦 Где скачать сборку?', a: 'Официальная сборка доступна на сайте fresnas-studio.ru в разделе «Загрузки».' },
+    { q: '🐞 Что делать при краше?', a: 'Пришлите crash-лог в тикет. Убедитесь, что сборка установлена чисто, без конфликтующих модов.' },
+    { q: '💳 Как оплатить лицензию?', a: 'Карты Visa/MC/МИР, СБП, крипта. Доступ активируется в течение 5–10 минут.' },
+    { q: '🖥️ Можно ли перенести сервер на VPS?', a: 'Да. В тикете укажите платформу, версию и желаемого хостинг-провайдера — поможем с переносом.' },
+    { q: '⭐ Как оценить поддержку?', a: 'После закрытия тикета появится окно с ⭐-оценкой (CSAT).' },
+    { q: '📝 Куда девается черновик?', a: 'Форма автосохраняется каждые 3 секунды. Вернитесь — текст на месте.' },
+    { q: '🔐 Логи и приватность?', a: 'Политика no-logs. Ваши данные не передаются третьим лицам.' }
+];
+function renderFaq() {
+    const l = document.getElementById('faqList');
+    if (!l) return;
+    l.innerHTML = FAQ_DATA.map((item, i) => `<div class="faq-item" id="faq-${i}"><div class="faq-q" onclick="toggleFaq(${i})"><span>${item.q}</span><span class="arrow">▼</span></div><div class="faq-a">${item.a}</div></div>`).join('');
+}
+function toggleFaq(i) { document.getElementById('faq-' + i)?.classList.toggle('open'); }
+
+/* ================= INIT ================= */
+(function init() {
+    const st = localStorage.getItem(THEME_KEY);
+    if (st) applyTheme(st);
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) applyTheme('light');
+    else applyTheme('dark');
+    const sl = localStorage.getItem(LANG_KEY);
+    if (sl) currentLang = sl;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+    loadAll();
+    initServerStats();
+    renderFaq();
+    renderSupportPanel();
+    renderMaintenanceBanner();
+    renderMyPromos();
+    updateNavBadge();
+    updateStatusSwitcher();
+    startLiveUpdates();
+    setTimeout(() => { if (document.getElementById('ticketFormContainer') && !document.getElementById('ticketFormContainer').classList.contains('hidden')) restoreDraft(); }, 500);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay, .image-viewer').forEach(m => m.remove()); });
+})();
+
+function startLiveUpdates() {
+    setInterval(() => {
+        SERVERS.forEach(s => {
+            serverLoads[s.id] = Math.max(5, Math.min(95, serverLoads[s.id] + Math.random() * 8 - 4));
+            serverPings[s.id] = Math.max(15, Math.round(s.basePing + Math.random() * 8 - 4));
+        });
+        if (currentAdminTab === 'servers') renderServerInfo();
+    }, 5000);
+    setInterval(() => { if (document.getElementById('page-home')?.classList.contains('active')) renderSupportPanel(); }, 15000);
+}
+</script>
+</body>
+</html>
